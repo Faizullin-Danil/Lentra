@@ -7,11 +7,10 @@ import { useEffect } from 'react';
 
 const FavoutitesFilmsPage = () => {
     const favouritesFilms = useSelector((state: RootState) => state.favouritesFilms.value);
-    const favouritesFilteredFilms = useSelector((state: RootState) => state.filteredFilms.value);
     const dispatch = useDispatch()
 
     useEffect(() => {
-        // console.log("aa",favouritesFilteredFilms)
+        
     }, [])
 
     return (

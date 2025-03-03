@@ -1,8 +1,6 @@
 import "./ListFilms.css"
 import FilmCard from '../FilmCard/FilmCard';
 
-
-
 const ListFilms = ({films}) => {
   const roundToDecimal = (num: number, decimalPlaces: number) => {
     const factor = Math.pow(10, decimalPlaces);

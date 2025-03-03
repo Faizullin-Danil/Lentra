@@ -23,27 +23,6 @@ export const FavouritesFilmsSlice = createSlice({
         deleteFavouriteFilm: (state, action) => {
             state.value = state.value.filter(favouriteFilm => favouriteFilm.id !== action.payload)
         },
-        setFavouriteFilteredFilms: (state, action) => {
-            state.value = action.payload
-            state.allFilms = action.payload
-        },
-        setFavouriteFilmsCountry: (state, action) => {
-            state.value = state.allFilms.filter(film => 
-                film.countries.some(country => country.name === action.payload)
-            );
-        },
-        setFavouriteFilmsGenres: (state, action) => {
-            state.value = state.allFilms.filter(film => 
-                film.genres.some(genre => genre.name === action.payload)
-            );
-        },
-        setFavouriteFilmsYears: (state, action) => {
-            state.value = state.allFilms.filter(film => (film.year >= action.payload.from) && (film.year <= action.payload.to)
-            );
-        },
-        setFavouriteFilmsClearFilter: (state) => {
-            state.value.length = 0
-        }
     }
 })
 

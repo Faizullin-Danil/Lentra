@@ -4,9 +4,8 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { setClearFilter, setYears } from "../../store/FilmsSlice";
-import { RootState } from "@/store/store";
 
-const Filter: React.FC = () => {
+const Filter: React.FC = (films, setFilteredFilms) => {
   const [countryTitle, setCountryTitle] = useState<string>("Все страны");
   const [genreTitle, setGenreTitle] = useState<string>("Все жанры");
   const [valueFrom, setValueFrom] = useState<number | "">("");
@@ -14,7 +13,6 @@ const Filter: React.FC = () => {
   const [errorFrom, setErrorFrom] = useState<boolean>(false);
   const [errorTo, setErrorTo] = useState<boolean>(false);
   const dispatch = useDispatch();
-  const filteredFilms = useSelector((state: RootState) => state.filteredFilms.value);
 
   // Состояние для отслеживания, какой список открыт
   const [isOpen, setIsOpen] = useState<{ countries: boolean; genres: boolean }>({
@@ -56,7 +54,6 @@ const Filter: React.FC = () => {
       setIsOpen({countries: false, genres: false})
       const YearsFromAndTo = { from: valueFrom, to: valueTo };
       dispatch(setYears(YearsFromAndTo));
-      console.log(filteredFilms);
     }
   };
 

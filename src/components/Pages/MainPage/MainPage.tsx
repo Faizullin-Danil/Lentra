@@ -5,14 +5,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { useEffect } from "react";
 import { setFilms } from "../../../store/FilmsSlice";
-import { setFilteredFilms } from "../../../store/FilteredFilmsSlice";
 
 // import mockFilms from "../../../mockFilms";
 
 
 const MainPage = () => {
   const films = useSelector((state: RootState) => state.films.value);
-  const filteredFilms = useSelector((state: RootState) => state.filteredFilms.value);
   const dispatch = useDispatch();
 
   // useEffect(() => {
@@ -36,7 +34,6 @@ const MainPage = () => {
           
           const data = await response.json()
           dispatch(setFilms(data.docs))
-          dispatch(setFilteredFilms(data.docs))
       } catch(error) {
         console.error("Ошибка загрузки данных:", error)
       } 
@@ -46,27 +43,11 @@ const MainPage = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (films.length > 0)
-      console.log(filteredFilms)
-  }, [filteredFilms])
+    console.log(films)
+  }, [films])
 
   return (
     <div className="mt-[70px] w-full flex justify-center">
-      {/* {filteredFilms.length === 0 ? (
-        <div className="w-[80%] flex flex-col items-center">
-          <Filter />
-          <div className="ml-40">
-            <ListFilms films={films} />
-          </div>
-        </div>
-      ) : (
-        <div className="w-[80%] flex flex-col items-center">
-          <Filter />
-          <div className="ml-40">
-            <ListFilms films={filteredFilms} />
-          </div>
-        </div>
-      )} */}
       <div className="w-[80%] flex flex-col items-center">
           <Filter />
           <div className="ml-40">
