@@ -1,0 +1,9 @@
+.FilmCard {
+    display: flex;
+    flex-direction: column;
+    border-top: 2px solid black;
+}
+
+.noMargin {
+    margin: 0px 10px;
+}
