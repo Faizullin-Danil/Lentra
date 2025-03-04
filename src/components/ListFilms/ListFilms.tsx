@@ -8,7 +8,7 @@ const ListFilms = ({films}) => {
   }
   
   return (
-    <div className='flex-1 w-[80%]'>
+    <div className='w-[80%]'>
         {films.map((film, index) => (
           <FilmCard 
             key = {index}
@@ -24,7 +24,7 @@ const ListFilms = ({films}) => {
               .slice(0, 2) 
               .map((person: string) => person.name)
               .join(", ")}
-            rating = {roundToDecimal(film.rating.kp, 2)}
+            rating = {roundToDecimal(film.rating.kp, 1)}
             movieLength = {film.movieLength}
             producer = {film.persons
               .filter((person: string) => person.profession === "продюсеры") 

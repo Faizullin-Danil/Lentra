@@ -22,9 +22,11 @@ export const FilmsSlice = createSlice({
         },
         setCountry: (state, action) => {
             state.value = state.allFilms.filter(film => 
-                film.countries.some(country => country.name === action.payload)
+                film.countries.some(country => 
+                    country.name.includes(action.payload) || action.payload.includes(country.name)
+                )
             );
-        },
+        },        
         setGenres: (state, action) => {
             state.value = state.allFilms.filter(film => 
                 film.genres.some(genre => genre.name === action.payload)

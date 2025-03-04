@@ -48,13 +48,12 @@ const MainPage = () => {
 
   return (
     <div className="mt-[70px] w-full flex justify-center">
-      <div className="w-[80%] flex flex-col items-center">
-          <Filter />
-          <div className="ml-40">
-            <ListFilms films={films} />
-          </div>
-        </div>
+      <div className="w-[80%] flex flex-col items-center ml-40">  {/* Добавил отступ */}
+        <Filter whichPage="Главная страница"/>
+        <ListFilms films={films} />
+      </div>
     </div>
+
   );
 };
 

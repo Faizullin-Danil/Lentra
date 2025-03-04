@@ -42,16 +42,18 @@ const FilmCard: React.FC<FilmProps> = ({film, id, name, countries, year, genres,
     <div>
       <div className='m-2 pl-2 flex flex-row gap-10'>
         <div className='gap-5 flex flex-row w-[70%]'>
-          <img src={poster} className='w-32 h-32' />
+          <img src={poster} className='w-20 h-32' />
           <div className=''>
-            <h1 className='text-4xl font-bold '>{name}</h1>
-            <h1 className='font-semibold'>{enName}, {year}, {Math.floor(movieLength / 60)} ч {movieLength - Math.floor(movieLength / 60)*60} мин</h1>
-            {countries && <h3 className='font-normal text-gray-400'>Страна: {countries}; Жанр: {genres}; Продюсеры: {producer}</h3>}
+            <h1 className='text-xl font-bold '>{name}</h1>
+            <h1 className='text-l font-semibold'>{enName}, {year}, {Math.floor(movieLength / 60)} ч {movieLength - Math.floor(movieLength / 60)*60} мин</h1>
+            {/* {countries && <h3 className='text-m font-normal text-gray-400'>Страна: {countries}; Жанр: {genres}; Продюсеры: {producer}</h3>} */}
+            <h3 className='text-m font-normal text-gray-400'>Страна: {countries}</h3>
+            <h3 className='text-m font-normal text-gray-400'>Жанр: {genres}</h3>
+            <h3 className='text-m font-normal text-gray-400'>Продюсеры: {producer}</h3>
             <h2 className='font-normal text-gray-400'>В ролях: {actors}</h2>
-            <p>{id}</p>
           </div>
         </div>
-        <h2 className='justify-center items-center flex flex-1'>Рейтинг: {rating}</h2>
+        <h2 className='justify-center items-center flex flex-1 text-[#FFD700]'>{rating}</h2>
         <div>
           { isFavourite 
             ? <FaStar className="cursor-pointer" onClick={handleToggleFavourite}/> 
