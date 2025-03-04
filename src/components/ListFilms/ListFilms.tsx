@@ -1,7 +1,14 @@
 import "./ListFilms.css"
 import FilmCard from '../FilmCard/FilmCard';
+import React from "react";
+import { Film } from "@/interfaces/Ifilm";
 
-const ListFilms = ({films}) => {
+interface ListFilmProps {
+  films: Film[];
+}
+
+
+const ListFilms: React.FC<ListFilmProps> = ({films}) => {
   const roundToDecimal = (num: number, decimalPlaces: number) => {
     const factor = Math.pow(10, decimalPlaces);
     return Math.round(num * factor) / factor;
@@ -18,18 +25,18 @@ const ListFilms = ({films}) => {
             enName = {film.enName}
             countries = {film.countries.map((country) => (country.name)).join(", ")}
             year = {film.year}
-            genres = {film.genres.map((genre: string) => genre.name).slice(0, 2).join(", ")}
+            genres = {film.genres.map((genre) => genre.name).slice(0, 2).join(", ")}
             actors = {film.persons
-              .filter((person: string) => person.profession === "актеры")
+              .filter((person) => person.profession === "актеры")
               .slice(0, 2) 
-              .map((person: string) => person.name)
+              .map((person) => person.name)
               .join(", ")}
             rating = {roundToDecimal(film.rating.kp, 1)}
             movieLength = {film.movieLength}
             producer = {film.persons
-              .filter((person: string) => person.profession === "продюсеры") 
+              .filter((person) => person.profession === "продюсеры") 
               .slice(0, 2) 
-              .map((person: string) => person.name)
+              .map((person) => person.name)
               .join(", ")}
             poster={film.poster.url}
           />

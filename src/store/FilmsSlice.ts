@@ -1,13 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-
-interface Film {
-    id: number;
-    name: string;
-    alternativeName: string;
-    countries: Array<{ name: string }>;
-    genres: Array<{ name: string }>;
-    year: number;
-  }
+import { Film } from "@/interfaces/Ifilm";
 
 export const FilmsSlice = createSlice({
     name: 'films',
