@@ -11,7 +11,7 @@ export const AlertSlice = createSlice({
         },
         closeAlert: (state) => {
             state.value = false;
-        }        
+        },  
     }
 })
 
@@ -23,4 +23,5 @@ export const openAlertWithTimeout = () => (dispatch: any) => {
         dispatch(closeAlert());
     }, 2000);
 };
+
 export default AlertSlice

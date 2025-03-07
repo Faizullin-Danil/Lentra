@@ -6,36 +6,36 @@ export const FavouritesFilmsSlice = createSlice({
     name: 'favouritesfilms',
     initialState: {
         value: [] as FavouriteFilm[],
-        allFilms: [] as FavouriteFilm[]
+        allFavouritesFilms: [] as FavouriteFilm[]
     },
     reducers: {
         addFavouriteFilm: (state, action) => {
             const newFilm = action.payload
             state.value = [...state.value, newFilm]
-            state.allFilms = [...state.allFilms, newFilm]
+            state.allFavouritesFilms = [...state.allFavouritesFilms, newFilm]
         },
         deleteFavouriteFilm: (state, action) => {
             state.value = state.value.filter(favouriteFilm => favouriteFilm.id !== action.payload)
-            state.allFilms = state.allFilms.filter(favouriteFilm => favouriteFilm.id !== action.payload)
+            state.allFavouritesFilms = state.allFavouritesFilms.filter(favouriteFilm => favouriteFilm.id !== action.payload)
         },
         setFavouriteCountry: (state, action) => {
-            state.value = state.allFilms.filter(film => 
+            state.value = state.allFavouritesFilms.filter(film => 
                 film.countries.some(country => 
                     country.name.includes(action.payload) || action.payload.includes(country.name)
                 )
             );
         },
         setFavouriteGenres: (state, action) => {
-            state.value = state.allFilms.filter(film => 
+            state.value = state.allFavouritesFilms.filter(film => 
                 film.genres.some(genre => genre.name === action.payload)
             );
         },
         setFavouriteYears: (state, action) => {
-            state.value = state.allFilms.filter(film => (film.year >= action.payload.from) && (film.year <= action.payload.to)
+            state.value = state.allFavouritesFilms.filter(film => (film.year >= action.payload.from) && (film.year <= action.payload.to)
             );
         },
         setFavouriteClearFilter: (state) => {
-            state.value = state.allFilms
+            state.value = state.allFavouritesFilms
         }
     }
 })

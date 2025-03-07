@@ -1,4 +1,4 @@
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
 import "./FavoutitesFilmsPage.css"
 import ListFilms from '../../../components/ListFilms/ListFilms';
@@ -6,21 +6,25 @@ import Filter from '../../Filter/Filter';
 import { useEffect } from 'react';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
+import { setFavouriteClearFilter } from "../../../store/FavouriteFilmsSlice";
 
 
 const FavoutitesFilmsPage = () => {
     const favouritesFilms = useSelector((state: RootState) => state.favouritesFilms.value);
     const openAlert = useSelector((state: RootState) => state.alert.value);
+    const dispatch = useDispatch()
 
     useEffect(() => {
-        
+        return () => {
+            dispatch(setFavouriteClearFilter())
+        }
     }, [])
 
     return (
         <div className="mt-[70px] w-full flex justify-center">
             {favouritesFilms.length > 0 ? (
                 <div className="w-[80%] flex flex-col items-center ml-40">
-                    <Filter films={favouritesFilms} whichPage="Страница избранных"/>
+                    <Filter whichPage="Страница избранных"/>
                     <ListFilms films={favouritesFilms} />
                 </div>
             ) : (

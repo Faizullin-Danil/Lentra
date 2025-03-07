@@ -2,14 +2,14 @@ import { useState } from "react";
 import DropDownMenu from "../DropDownMenu/DropDownMenu";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setClearFilter, setYears } from "../../store/FilmsSlice";
 import { setFavouriteClearFilter, setFavouriteYears } from "../../store/FavouriteFilmsSlice";
 import { openAlertWithTimeout } from "../../store/AlertSlice"
+import { RootState } from "@/store/store";
 
 interface FilterProps {
   whichPage: string;
-  films: Array<any>;
 }
 
 const Filter: React.FC<FilterProps> = ({ whichPage }) => {
@@ -20,6 +20,8 @@ const Filter: React.FC<FilterProps> = ({ whichPage }) => {
   const [errorFrom, setErrorFrom] = useState<boolean>(false);
   const [errorTo, setErrorTo] = useState<boolean>(false);
   const dispatch = useDispatch();
+  const allFavouritesFilms = useSelector((state: RootState) => state.favouritesFilms.allFavouritesFilms);
+  const allFilms = useSelector((state: RootState) => state.films.allFilms);
 
   const onChangeFrom = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value.replace(/\D/g, "");
@@ -49,22 +51,24 @@ const Filter: React.FC<FilterProps> = ({ whichPage }) => {
       hasError = true;
     }
 
+    const isFilmsYears = allFilms.filter(film => (film.year >= valueFrom) && (film.year <= valueTo))
+    const isFavouritesFilmsYears = allFavouritesFilms.filter(film => (film.year >= valueFrom) && (film.year <= valueTo))
+    
     if (!hasError) {
       setCountryTitle("Все страны");
       setGenreTitle("Все жанры");
       const YearsFromAndTo = { from: valueFrom, to: valueTo };
-      if (whichPage === "Главная страница") {
+      if (whichPage === "Главная страница" && isFilmsYears.length !== 0) {
         dispatch(setYears(YearsFromAndTo));
-      } else if (whichPage === "Страница избранных") {
+      } else if (whichPage === "Страница избранных" && isFavouritesFilmsYears.length !== 0) {
         dispatch(setFavouriteYears(YearsFromAndTo));
+      } else {
+        dispatch(openAlertWithTimeout())
       }
-    }
 
-    if (films === undefined) {
-      dispatch(openAlertWithTimeout())
     }
-    console.log(films)
   };
+
 
   const clearFilter = () => {
     setValueFrom("");
