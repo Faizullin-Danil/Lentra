@@ -1,15 +1,10 @@
-import Accordion from '@mui/material/Accordion';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import Typography from '@mui/material/Typography';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import Button from '@mui/material/Button';
-import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from "react";
+import { Autocomplete, TextField } from "@mui/material";
+import { useDispatch, useSelector } from "react-redux";
 import { setCountry, setGenres, setClearFilter } from "../../store/FilmsSlice";
 import { setFavouriteCountry, setFavouriteGenres, setFavouriteClearFilter } from "../../store/FavouriteFilmsSlice";
-import { RootState } from '@/store/store';
-import Modal from '../Modal/Modal';
+import { RootState } from "@/store/store";
+import { openAlertWithTimeout } from "../../store/AlertSlice";
 
 interface DropDownMenuProps {
   whichPage: string;
@@ -18,8 +13,6 @@ interface DropDownMenuProps {
   type?: string;
   resetOtherFilter: () => void;
   setTitle: (title: string) => void;
-  isOpen: boolean;
-  toggleDropdown: () => void; 
   setValueFrom: (value: string) => void; 
   setValueTo: (value: string) => void;
 }
@@ -31,53 +24,46 @@ const DropDownMenu: React.FC<DropDownMenuProps> = ({
   type,
   resetOtherFilter,
   setTitle,
-  isOpen,
-  toggleDropdown,
   setValueFrom,
   setValueTo
 }) => {
-  const favoutitesFilms = useSelector((state: RootState) => state.favouritesFilms.value)
+  const favouritesFilms = useSelector((state: RootState) => state.favouritesFilms.value);
   const dispatch = useDispatch();
 
-  const [openModal, setOpenModal] = useState(false);
-  const [modalMessage, setModalMessage] = useState("");
+  const handleFilter = (event: React.ChangeEvent<{}>, value: string | null) => {
+    if (!value) return;
 
-  const handleFilter = (text: string) => {
-    console.log(text);
-    setTitle(text);
+    setTitle(value);
     resetOtherFilter();
-    const copyFavoutitesFilms = favoutitesFilms;
 
     if (whichPage === "Главная страница") {
-      if (text === "Все страны" || text === "Все жанры") {
+      if (value === "Все страны" || value === "Все жанры") {
         dispatch(setClearFilter());
       } else if (type === "Страны") {
-        dispatch(setCountry(text));
+        dispatch(setCountry(value));
       } else {
-        dispatch(setGenres(text));
+        dispatch(setGenres(value));
       }
     } else if (whichPage === "Страница избранных") {
-      if (text === "Все страны" || text === "Все жанры") {
+      if (value === "Все страны" || value === "Все жанры") {
         dispatch(setFavouriteClearFilter());
       } else if (type === "Страны") {
-        const isCountryExist = copyFavoutitesFilms.some(film =>
-          film.countries.some(country => country.name === text)
+        const isCountryExist = favouritesFilms.some(film =>
+          film.countries.some(country => country.name === value)
         );
         if (isCountryExist) {
-          dispatch(setFavouriteCountry(text));
+          dispatch(setFavouriteCountry(value));
         } else {
-          setModalMessage(`В избранных фильмах нет фильмов из ${text}`);
-          setOpenModal(true); 
+          dispatch(openAlertWithTimeout());
         }
       } else {
-        const isGenresExist = copyFavoutitesFilms.some(film =>
-          film.genres.some(genre => genre.name === text)
+        const isGenresExist = favouritesFilms.some(film =>
+          film.genres.some(genre => genre.name === value)
         );
         if (isGenresExist) {
-          dispatch(setFavouriteGenres(text));
+          dispatch(setFavouriteGenres(value));
         } else {
-          setModalMessage(`В избранных фильмах нет жанра ${text}`);
-          setOpenModal(true); 
+          dispatch(openAlertWithTimeout());
         }
       }
     }
@@ -86,27 +72,13 @@ const DropDownMenu: React.FC<DropDownMenuProps> = ({
   };
 
   return (
-    <div>
-      <Accordion expanded={isOpen} onChange={toggleDropdown}>
-        <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1-content" id="panel1-header">
-          <Typography component="span">{title}</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          {buttons.map((buttonText) => (
-            <Button key={buttonText} onClick={() => handleFilter(buttonText)}>
-              {buttonText}
-            </Button>
-          ))}
-        </AccordionDetails>
-      </Accordion>
-
-      {openModal && (
-        <Modal
-          message={modalMessage}
-          onClose={() => setOpenModal(false)}
-        />
-      )}
-    </div>
+    <Autocomplete
+      disablePortal
+      options={buttons}
+      value={title}
+      onChange={handleFilter}
+      renderInput={(params) => <TextField {...params} label={type || "Выберите"} />}
+    />
   );
 };
 

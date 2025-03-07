@@ -13,8 +13,8 @@ const FilmPage = () => {
     console.log(film)
     
     return (
-        <div className="mt-[70px]">
-            <FilmCard 
+        <div className="mt-[70px] flex w-[80%] justify-center">
+            {/* <FilmCard 
                 film = {film}
                 id = {film.id}
                 name = {film.name || film.alternativeName}
@@ -35,7 +35,19 @@ const FilmPage = () => {
                 .map((person) => person.name)
                 .join(", ")}
                 poster={film.poster.url}
-            />
+            /> */}
+            <div className="flex ">
+                <div className="w-[30%]">
+                    <img src={film.poster.url} className='w-20 h-32' />
+                </div>
+                <div className="w-[40%]">
+                    <h1>{film.name}</h1>
+                </div>
+                <div className="w-[30%]">
+                    <h1>{film.rating.kp}</h1>
+                </div>
+            </div>
+            
         </div>
     );
 };

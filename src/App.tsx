@@ -4,6 +4,7 @@ import store from "./store/store";
 import Router from './Router'
 import { BrowserRouter } from 'react-router-dom';
 import Header from './components/Header/Header';
+import Footer from './components/Footer/Footer';
 
 function App() {
 
@@ -12,6 +13,7 @@ function App() {
       <Provider store={store}>
         <Header/>
         <Router/>
+        {/* <Footer/> */}
       </Provider>
     </BrowserRouter>
     

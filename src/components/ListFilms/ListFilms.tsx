@@ -15,7 +15,7 @@ const ListFilms: React.FC<ListFilmProps> = ({films}) => {
   }
   
   return (
-    <div className='w-[80%]'>
+    <div className='w-[70%]'>
         {films.map((film, index) => (
           <FilmCard 
             key = {index}

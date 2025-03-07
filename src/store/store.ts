@@ -1,12 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { FilmsSlice } from "./FilmsSlice";
 import { FavouritesFilmsSlice } from "./FavouriteFilmsSlice";
-
+import { AlertSlice } from "./AlertSlice";
 
 export const store = configureStore({
   reducer: {
     films: FilmsSlice.reducer,
     favouritesFilms: FavouritesFilmsSlice.reducer,
+    alert: AlertSlice.reducer,
   },
 });
 

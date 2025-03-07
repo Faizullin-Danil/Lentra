@@ -5,12 +5,14 @@ import Button from "@mui/material/Button";
 import { useDispatch } from "react-redux";
 import { setClearFilter, setYears } from "../../store/FilmsSlice";
 import { setFavouriteClearFilter, setFavouriteYears } from "../../store/FavouriteFilmsSlice";
+import { openAlertWithTimeout } from "../../store/AlertSlice"
 
 interface FilterProps {
-  whichPage: string
+  whichPage: string;
+  films: Array<any>;
 }
 
-const Filter: React.FC<FilterProps> = ({whichPage}) => {
+const Filter: React.FC<FilterProps> = ({ whichPage }) => {
   const [countryTitle, setCountryTitle] = useState<string>("Все страны");
   const [genreTitle, setGenreTitle] = useState<string>("Все жанры");
   const [valueFrom, setValueFrom] = useState<string>("");
@@ -18,12 +20,6 @@ const Filter: React.FC<FilterProps> = ({whichPage}) => {
   const [errorFrom, setErrorFrom] = useState<boolean>(false);
   const [errorTo, setErrorTo] = useState<boolean>(false);
   const dispatch = useDispatch();
-
-  // Состояние для отслеживания, какой список открыт
-  const [isOpen, setIsOpen] = useState<{ countries: boolean; genres: boolean }>({
-    countries: false,
-    genres: false,
-  });
 
   const onChangeFrom = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value.replace(/\D/g, "");
@@ -54,9 +50,8 @@ const Filter: React.FC<FilterProps> = ({whichPage}) => {
     }
 
     if (!hasError) {
-      setCountryTitle("Все страны")
-      setGenreTitle("Все жанры")
-      setIsOpen({countries: false, genres: false})
+      setCountryTitle("Все страны");
+      setGenreTitle("Все жанры");
       const YearsFromAndTo = { from: valueFrom, to: valueTo };
       if (whichPage === "Главная страница") {
         dispatch(setYears(YearsFromAndTo));
@@ -64,67 +59,55 @@ const Filter: React.FC<FilterProps> = ({whichPage}) => {
         dispatch(setFavouriteYears(YearsFromAndTo));
       }
     }
-  };
 
-  // Функция для переключения открытия/закрытия меню
-  const toggleDropdown = (type: "countries" | "genres") => {
-    setIsOpen((prevState) => ({
-      countries: type === "countries" ? !prevState.countries : false,
-      genres: type === "genres" ? !prevState.genres : false,
-    }));
+    if (films === undefined) {
+      dispatch(openAlertWithTimeout())
+    }
+    console.log(films)
   };
 
   const clearFilter = () => {
-    setIsOpen({countries: false, genres: false})
-    setValueFrom("")
-    setValueTo("")
+    setValueFrom("");
+    setValueTo("");
     if (whichPage === "Главная страница") {
-      dispatch(setClearFilter())
+      dispatch(setClearFilter());
     } else if (whichPage === "Страница избранных") {
-      dispatch(setFavouriteClearFilter())
+      dispatch(setFavouriteClearFilter());
     }
-    dispatch(setClearFilter())
-    setCountryTitle("Все страны")
-    setGenreTitle("Все жанры")
-  }
-
-  
+    setCountryTitle("Все страны");
+    setGenreTitle("Все жанры");
+  };
 
   return (
-    <div className="w-[10%] fixed left-40">
+    <div className="w-[14%] fixed left-40 mt-[27px]">
       <div className="mb-2">
-        <h1>Страны</h1>
         <DropDownMenu
           whichPage={whichPage}
           type="Страны"
           title={countryTitle}
           setTitle={setCountryTitle}
-          buttons={["Все страны", "Канада", "США", "Германия", "Болгария", "Австрия", "Венгрия"]}
+          buttons={["Все страны", "Канада", "США", "Германия", "Болгария", "Австрия", "Венгрия", "csscsc"]}
           resetOtherFilter={() => setGenreTitle("Все жанры")}
-          isOpen={isOpen.countries}
-          toggleDropdown={() => toggleDropdown("countries")}
           setValueFrom={setValueFrom}
           setValueTo={setValueTo}
         />
       </div>
 
       <div className="mb-2">
-        <h1>Жанры</h1>
         <DropDownMenu
           whichPage={whichPage}
           title={genreTitle}
+          type="Жанры"
           setTitle={setGenreTitle}
           buttons={["Все жанры", "драма", "мелодрама", "мюзикл", "комедия", "боевик", "фэнтези", "фантастика", "триллер", "ужасы"]}
           resetOtherFilter={() => setCountryTitle("Все страны")}
-          isOpen={isOpen.genres}
-          toggleDropdown={() => toggleDropdown("genres")}
           setValueFrom={setValueFrom}
           setValueTo={setValueTo}
         />
       </div>
 
-      <div className="border-2 border-gray-500 p-2">
-        <h1>Годы</h1>
+      <div className="border-2 border-gray-500 rounded-sm p-2">
+        <h1 className="pb-2">Годы</h1>
         <div className="flex gap-1">
           <TextField
             type="text"
@@ -133,10 +116,7 @@ const Filter: React.FC<FilterProps> = ({whichPage}) => {
             onChange={onChangeFrom}
             placeholder="от"
             size="small"
-            sx={{
-              "& input": { fontSize: "12px", padding: 1 },
-              "& .MuiInputBase-root": { padding: 0 },
-            }}
+            sx={{ "& input": { fontSize: "12px", padding: 1 }, "& .MuiInputBase-root": { padding: 0 } }}
           />
           <TextField
             type="text"
@@ -145,18 +125,14 @@ const Filter: React.FC<FilterProps> = ({whichPage}) => {
             onChange={onChangeTo}
             placeholder="до"
             size="small"
-            sx={{
-              "& input": { fontSize: "12px", padding: 1 },
-              "& .MuiInputBase-root": { padding: 0 },
-            }}
+            sx={{ "& input": { fontSize: "12px", padding: 1 }, "& .MuiInputBase-root": { padding: 0 } }}
           />
         </div>
-        <Button className="!text-black mt-2" size="small" onClick={filterByYears}>
+        <Button className="w-full !text-black !pt-3" size="small" onClick={filterByYears}>
           Фильтр по годам
         </Button>
       </div>
-
-      <Button onClick={clearFilter}>Очистить фильтры</Button>
+      <Button className="w-full !mt-2" onClick={clearFilter}>Очистить фильтры</Button>
     </div>
   );
 };
