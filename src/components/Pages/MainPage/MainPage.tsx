@@ -20,7 +20,7 @@ const MainPage = () => {
     if (films.length === 0) {
       const fetchFilms = async () => {
         try {
-          const response = await fetch("https://api.kinopoisk.dev/v1.4/movie?page=1&limit=15&selectFields=name&selectFields=enName&selectFields=year&selectFields=rating&selectFields=countries&selectFields=poster&selectFields=genres&selectFields=persons&selectFields=movieLength&selectFields=id&notNullFields=name&notNullFields=enName&notNullFields=poster.url&type=movie", {
+          const response = await fetch("https://api.kinopoisk.dev/v1.4/movie?page=1&limit=100&selectFields=name&selectFields=enName&selectFields=year&selectFields=rating&selectFields=countries&selectFields=poster&selectFields=genres&selectFields=persons&selectFields=movieLength&selectFields=id&notNullFields=name&notNullFields=enName&notNullFields=poster.url&type=movie&selectFields=ageRating", {
             method: "GET",
             headers: {
               "X-API-KEY": "CY4H6JG-W8D4NK0-GF0BJZE-507QBP1"
@@ -31,6 +31,7 @@ const MainPage = () => {
           }
 
           const data = await response.json();
+
           dispatch(setFilms(data.docs)); 
         } catch (error) {
           console.error("Ошибка загрузки данных:", error);
@@ -43,6 +44,8 @@ const MainPage = () => {
       dispatch(setClearFilter())
     }
   }, []);
+
+  console.log(films)
 
   return (
     <div className=" mt-[70px] flex justify-center">
