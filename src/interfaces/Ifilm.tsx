@@ -1,13 +1,13 @@
 export interface Film {
-    id: number;
-    name: string;
-    alternativeName: string;
-    countries: Array<{ name: string }>;
-    genres: Array<{ name: string }>;
-    year: number;
-    enName: string;
-    movieLength: number;
-    persons: Array<{ id: number; name: string; profession: string }>;
-    poster: { url: string; previewUrl: string };
-    rating: { kp: number; };
+    id: number | null | undefined;
+    name: string | null | undefined;
+    alternativeName: string | null | undefined;
+    countries: Array<{ name: string }> | null | undefined;
+    genres: Array<{ name: string }> | null | undefined;
+    year: number | null | undefined;
+    enName: string | null | undefined;
+    movieLength: number | null | undefined;
+    persons: Array<{ id: number; name: string; profession: string }> | null | undefined;
+    poster: { url: string; previewUrl: string } | null | undefined;
+    rating: { kp: number; } | null | undefined;
   }

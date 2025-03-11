@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { addFavouriteFilm, deleteFavouriteFilm } from '../../../store/FavouriteFilmsSlice';
 import { FaRegStar, FaStar } from "react-icons/fa";
+import TrailerComp  from "../../TrailerComp/TrailerComp"
 
 
 const FilmPage = () => {
@@ -36,15 +37,22 @@ const FilmPage = () => {
     return (
         <div className="mt-[70px] flex justify-center">
             <div className="w-[80%] flex justify-center mt-[27px]">
-                <div className="w-[30%] flex justify-center ">
-                    <img src={film.poster.url} className="w-50 h-70 object-cover rounded-lg" />
+                <div className="w-[30%] flex flex-col justify-center gap-5">
+                    <img src={film.poster.url} className="w-50 h-70 object-cover" />
+                    {film.videos.trailers.length > 0 
+                    ?   <div className="flex flex-col h-35">
+                            <TrailerComp videoUrl={film.videos.trailers[0].url} previewUrl={film.backdrop.previewUrl} /> 
+                            <h1>Трейлер</h1>
+                        </div>  
+                    : <h1>1</h1>}
                 </div>
                 <div className="w-[40%] flex flex-col gap-2">
-                        <h1 className="flex gap-14 text-2xl font-bold">{film.name} ({film.year}) 
-                            {isFavourite 
-                                ? <FaStar className="rounded-4xl text-4xl p-2" />
-                                : <FaRegStar className="rounded-4xl text-4xl p-2" />} 
-                        </h1>
+                    <h1 className="flex gap-14 text-2xl font-bold">{film.name} ({film.year}) 
+                        {isFavourite 
+                            ? <FaStar className="rounded-4xl text-4xl p-2" />
+                            : <FaRegStar className="rounded-4xl text-4xl p-2" />} 
+                    </h1>
+                    <h1 className="text-xs" style={{ textIndent: '3rem' }}>{film.description}</h1>
                     <Button className="flex w-[250px] cursor-pointer !bg-gray-200 rounded-4xl !text-black text-3xl transition duration-300 hover:!bg-gray-300" onClick={handleToggleFavourite}>
                         {isFavourite 
                             ? <h1 className="flex items-center gap-2">убрать из избранного</h1> 
@@ -124,7 +132,11 @@ const FilmPage = () => {
                                 <h1 key={person.id} className="text-sm">{person.name}</h1>
                             ))}
                     </div>
-                    <Button className="!text-xs !justify-center !text-blue-600">{film.persons.length} актер(-ов)</Button>
+                    <Button className="!text-[12px] !justify-center !text-blue-600" 
+                            disableRipple 
+                            sx={{ "&:hover": { backgroundColor: "transparent", textDecoration: "underline"  } }}>
+                                {film.persons.length} актер(-ов)
+                    </Button>
 
                 </div>
             </div>

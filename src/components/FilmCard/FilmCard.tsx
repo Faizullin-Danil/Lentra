@@ -19,7 +19,7 @@ interface FilmProps {
   producer: string,
   rating: number,
   movieLength: number
-  poster: string
+  poster: string | null
 }
 
 const FilmCard: React.FC<FilmProps> = ({film, id, name, countries, year, genres, enName, actors, producer, rating, movieLength, poster}) => {

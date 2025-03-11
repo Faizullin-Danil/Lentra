@@ -20,10 +20,16 @@ const MainPage = () => {
     if (films.length === 0) {
       const fetchFilms = async () => {
         try {
-          const response = await fetch("https://api.kinopoisk.dev/v1.4/movie?page=1&limit=100&selectFields=name&selectFields=enName&selectFields=year&selectFields=rating&selectFields=countries&selectFields=poster&selectFields=genres&selectFields=persons&selectFields=movieLength&selectFields=id&notNullFields=name&notNullFields=enName&notNullFields=poster.url&type=movie&selectFields=ageRating", {
+          // const response = await fetch("https://api.kinopoisk.dev/v2.2/movie?limit=100&selectFields=name&selectFields=enName&selectFields=year&selectFields=rating&selectFields=description&selectFields=countries&selectFields=poster&selectFields=genres&selectFields=persons&selectFields=movieLength&selectFields=backdrop&selectFields=id&selectFields=videos&notNullFields=name&notNullFields=enName&notNullFields=poster.url&type=movie&selectFields=ageRating", {
+          //   method: "GET",
+          //   headers: {
+          //     "X-API-KEY": "CY4H6JG-W8D4NK0-GF0BJZE-507QBP1"
+          //   }
+          // });
+          const response = await fetch("https://kinopoiskapiunofficial.tech/api/v2.2/films?type=FILM&ratingFrom=0&ratingTo=10&yearFrom=1000&yearTo=3000&page=2", {
             method: "GET",
             headers: {
-              "X-API-KEY": "CY4H6JG-W8D4NK0-GF0BJZE-507QBP1"
+              "X-API-KEY": "2695d350-4670-46ae-a005-dd42d5243474"
             }
           });
           if (!response.ok) {
@@ -32,7 +38,7 @@ const MainPage = () => {
 
           const data = await response.json();
 
-          dispatch(setFilms(data.docs)); 
+          dispatch(setFilms(data)); 
         } catch (error) {
           console.error("Ошибка загрузки данных:", error);
         }
@@ -46,6 +52,8 @@ const MainPage = () => {
   }, []);
 
   console.log(films)
+
+
 
   return (
     <div className=" mt-[70px] flex justify-center">
