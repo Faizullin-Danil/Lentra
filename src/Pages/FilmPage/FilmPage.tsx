@@ -3,9 +3,9 @@ import { Button } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
-import { addFavouriteFilm, deleteFavouriteFilm } from '../../../store/FavouriteFilmsSlice';
+import { addFavouriteFilm, deleteFavouriteFilm } from '../../store/FavouriteFilmsSlice';
 import { FaRegStar, FaStar } from "react-icons/fa";
-import TrailerComp  from "../../TrailerComp/TrailerComp"
+import TrailerComp  from "../../components/TrailerComp/TrailerComp"
 
 
 const FilmPage = () => {

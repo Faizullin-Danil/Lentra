@@ -25,10 +25,11 @@ interface FilmProps {
 const FilmCard: React.FC<FilmProps> = ({film, id, name, countries, year, genres, enName, actors, producer, rating, movieLength, poster}) => {
   const dispatch = useDispatch()
   const favouritesFilms = useSelector((state: RootState) => state.favouritesFilms.value)
-  const [isFavourite, setIsFavourite] = useState(favouritesFilms.some(favFilm => favFilm.id === id))
+  const [isFavourite, setIsFavourite] = useState(favouritesFilms.some(favFilm => favFilm.kinopoiskId === id))
+  console.log(favouritesFilms)
 
   useEffect(() => {
-    setIsFavourite(favouritesFilms.some(favFilm => favFilm.id === id))
+    setIsFavourite(favouritesFilms.some(favFilm => favFilm.kinopoiskId === id))
   }, [favouritesFilms, id])
 
   const handleToggleFavourite = () => {
@@ -49,9 +50,9 @@ const FilmCard: React.FC<FilmProps> = ({film, id, name, countries, year, genres,
             <h1 className='text-xl font-bold'>{name}</h1>
             <h1 className='text-l font-semibold'>{enName}, {year}, {Math.floor(movieLength / 60)} ч {movieLength - Math.floor(movieLength / 60) * 60} мин</h1>
             <h3 className='text-m font-normal text-gray-400'>Страна: {countries}</h3>
-            <h3 className='text-m font-normal text-gray-400'>Жанр: {genres}</h3>
+            <h3 className='text-m font-normal text-gray-400 flex gap-1'>Жанр: {genres}</h3>
             <h3 className='text-m font-normal text-gray-400'>Продюсеры: {producer}</h3>
-            <h2 className='font-normal text-gray-400'>В ролях: {actors}</h2>
+            {actors.length > 0 ? <h1 className='font-normal text-gray-400'>В ролях: {actors}</h1> : <h1 className='font-normal text-gray-400'>В ролях: не указано</h1>}
           </div>
         </Link>
 

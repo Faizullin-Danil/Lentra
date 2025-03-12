@@ -9,19 +9,19 @@ export const FilmsSlice = createSlice({
     },
     reducers: {
         setFilms: (state, action) => {
-            state.value = action.payload
-            state.allFilms = action.payload
+            state.value = action.payload;
+            state.allFilms = action.payload;
         },
         setCountry: (state, action) => {
             state.value = state.allFilms.filter(film => 
                 film.countries.some(country => 
-                    country.name.includes(action.payload) || action.payload.includes(country.name)
+                    country.country.includes(action.payload) || action.payload.includes(country.name)
                 )
             );
         },        
         setGenres: (state, action) => {
             state.value = state.allFilms.filter(film => 
-                film.genres.some(genre => genre.name === action.payload)
+                film.genres.some(genre => genre.genre === action.payload)
             );
         },
         setYears: (state, action) => {

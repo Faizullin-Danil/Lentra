@@ -1,12 +1,12 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
-import "./FavoutitesFilmsPage.css"
-import ListFilms from '../../../components/ListFilms/ListFilms';
-import Filter from '../../Filter/Filter';
+import "./FavouritesFilmsPage.css"
+import ListFilms from '../../components/ListFilms/ListFilms';
+import Filter from '../../components/Filter/Filter';
 import { useEffect } from 'react';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
-import { setFavouriteClearFilter } from "../../../store/FavouriteFilmsSlice";
+import { setFavouriteClearFilter } from "../../store/FavouriteFilmsSlice";
 
 
 const FavoutitesFilmsPage = () => {

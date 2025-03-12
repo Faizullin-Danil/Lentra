@@ -90,7 +90,7 @@ const Filter: React.FC<FilterProps> = ({ whichPage }) => {
           type="Страны"
           title={countryTitle}
           setTitle={setCountryTitle}
-          buttons={["Все страны", "Канада", "США", "Германия", "Болгария", "Австрия", "Венгрия", "csscsc"]}
+          buttons={["Все страны", "Канада", "США", "Германия", "Болгария", "Австрия", "Венгрия", "csscsc", "Россия"]}
           resetOtherFilter={() => setGenreTitle("Все жанры")}
           setValueFrom={setValueFrom}
           setValueTo={setValueTo}

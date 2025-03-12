@@ -1,7 +1,7 @@
 import { Route, Routes} from "react-router-dom"
-import MainPage from './components/Pages/MainPage/MainPage';
-import FavoutitesPage from './components/Pages/FavoutitesFilmsPage/FavoutitesFilmsPage';
-import FilmPage from './components/Pages/FilmPage/FilmPage';
+import MainPage from './Pages/MainPage/MainPage';
+import FavoutitesPage from './Pages/FavouritesFilmsPage/FavouritesFilmsPage';
+import FilmPage from './Pages/FilmPage/FilmPage';
 
 const Router = () => {
   return (

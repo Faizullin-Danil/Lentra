@@ -45,7 +45,7 @@ const DropDownMenu: React.FC<DropDownMenuProps> = ({
         dispatch(setClearFilter());
       } else if (type === "Страны") {
         isCountryExist = allFilms.some(film =>
-          film.countries.some(country => country.name === value)
+          film.countries.some(country => country.country === value)
         );
         if (isCountryExist) {
           dispatch(setCountry(value));
@@ -54,7 +54,7 @@ const DropDownMenu: React.FC<DropDownMenuProps> = ({
         }
       } else {
         isGenresExist = allFilms.some(film =>
-          film.genres.some(genre => genre.name === value)
+          film.genres.some(genre => genre.genre === value)
         );
         if (isGenresExist) {
           dispatch(setGenres(value));
@@ -67,7 +67,7 @@ const DropDownMenu: React.FC<DropDownMenuProps> = ({
         dispatch(setFavouriteClearFilter());
       } else if (type === "Страны") {
         isCountryExist = allFavouritesFilms.some(film =>
-          film.countries.some(country => country.name === value)
+          film.countries.some(country => country.country === value)
         );
         if (isCountryExist) {
           dispatch(setFavouriteCountry(value));
@@ -76,7 +76,7 @@ const DropDownMenu: React.FC<DropDownMenuProps> = ({
         }
       } else {
         isGenresExist = allFavouritesFilms.some(film =>
-          film.genres.some(genre => genre.name === value)
+          film.genres.some(genre => genre.genre === value)
         );
         if (isGenresExist) {
           dispatch(setFavouriteGenres(value));
@@ -86,38 +86,6 @@ const DropDownMenu: React.FC<DropDownMenuProps> = ({
       }
     }
 
-
-    // if (whichPage === "Главная страница") {
-    //   if (value === "Все страны" || value === "Все жанры") {
-    //     dispatch(setClearFilter());
-    //   } else if (type === "Страны") {
-    //     dispatch(setCountry(value));
-    //   } else {
-    //     dispatch(setGenres(value));
-    //   }
-    // } else if (whichPage === "Страница избранных") {
-    //   if (value === "Все страны" || value === "Все жанры") {
-    //     dispatch(setFavouriteClearFilter());
-    //   } else if (type === "Страны") {
-    //     const isCountryExist = favouritesFilms.some(film =>
-    //       film.countries.some(country => country.name === value)
-    //     );
-    //     if (isCountryExist) {
-    //       dispatch(setFavouriteCountry(value));
-    //     } else {
-    //       dispatch(openAlertWithTimeout());
-    //     }
-    //   } else {
-    //     const isGenresExist = favouritesFilms.some(film =>
-    //       film.genres.some(genre => genre.name === value)
-    //     );
-    //     if (isGenresExist) {
-    //       dispatch(setFavouriteGenres(value));
-    //     } else {
-    //       dispatch(openAlertWithTimeout());
-    //     }
-    //   }
-    // }
     setValueFrom("");
     setValueTo("");
   };
