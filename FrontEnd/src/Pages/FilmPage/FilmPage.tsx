@@ -6,6 +6,7 @@ import { useLocation } from "react-router-dom";
 import { addFavouriteFilm, deleteFavouriteFilm } from '../../store/FavouriteFilmsSlice';
 import { FaRegStar, FaStar } from "react-icons/fa";
 import { deleteFavouriteFilm as deleteFavouriteFilmFromAPI, addFavouriteFilm as addFavouriteFilmFormAPI } from "../../services/apiService"
+import TabsPanel from "../../components/TabsPanel/TabsPanel";
 
 
 const FilmPage = () => {
@@ -39,120 +40,64 @@ const FilmPage = () => {
     console.log(film);
 
     return (
-        <div className="mt-[70px] flex justify-center">
-            <div className="w-[80%] flex justify-center mt-[27px]">
-                <div className="w-[30%] flex flex-col justify-center gap-5">
+        <div className="mt-[80px] flex flex-col items-center">
+            <div className="w-[80%] flex gap-10">
+                {/* Левая колонка с постером */}
+                <div className="w-1/3 flex flex-col gap-5">
                     <img src={film.poster_url} className="w-50 h-70 object-cover" />
-                    {/* {film.videos.trailers.length > 0 
-                    ?   <div className="flex flex-col h-35">
-                            <TrailerComp videoUrl={film.videos.trailers[0].url} previewUrl={film.backdrop.previewUrl} /> 
-                            <h1>Трейлер</h1>
-                        </div>  
-                    : <h1>1</h1>} */}
                 </div>
-                <div className="w-[40%] flex flex-col gap-2">
-                    <h1 className="flex gap-14 text-2xl font-bold">{film.name_ru} ({film.year}) 
-                        {isFavourite 
-                            ? <FaStar className="rounded-4xl text-4xl p-2" />
-                            : <FaRegStar className="rounded-4xl text-4xl p-2" />} 
+
+                {/* Центральная колонка с описанием */}
+                <div className="w-1/2 flex flex-col space-y-2">
+                    <h1 className="flex items-center gap-4 text-2xl font-bold">
+                        {film.name_ru} ({film.year})
+                        {isFavourite ? <FaStar className="text-4xl p-2" /> : <FaRegStar className="text-4xl p-2" />}
                     </h1>
                     <h1 className="text-xs" style={{ textIndent: '3rem' }}>{film.description}</h1>
                     <Button className="flex w-[250px] cursor-pointer !bg-gray-200 rounded-4xl !text-black text-3xl transition duration-300 hover:!bg-gray-300" onClick={handleToggleFavourite}>
                         {isFavourite 
                             ? <h1 className="flex items-center gap-2">убрать из избранного</h1> 
-                            : <h1 className="flex items-center gap-2">Добавить в избранное</h1>
-                        }
+                            : <h1 className="flex items-center gap-2">Добавить в избранное</h1>}
                     </Button>
-                    <h1 className="font-bold text-lg">О фильме</h1>
-                    <div className="text-xs flex flex-col gap-2">
-                        <div className="flex">
-                            <h1 className="w-[30%] text-gray-400">Год производства</h1>
-                            <h1 className="w-[70%]">{film.year}</h1>
-                        </div>
-                        <div className="flex">
-                            <h1 className="w-[30%] text-gray-400">Страна</h1>
-                            <h1 className="w-[70%]">{film.countries.map(country => country.country).join(", ")}</h1>
-                        </div>
-                        <div className="flex">
-                            <h1 className="w-[30%] text-gray-400">Жанр</h1>
-                            <h1 className="w-[70%]">{film.genres.map(genre => genre.genre).join(", ")}</h1>
-                        </div>
 
-                        <div className="flex">
-                            <h1 className="w-[30%] text-gray-400">Режиссер</h1>
-                            <h1 className="w-[70%]">{film.persons
-                                .filter((person) => person.profession_text === "Режиссеры") 
-                                .map((person) => person.name_ru || person.name_en)
-                                .join(", ") || "Не указано"}
-                            </h1>
-                        </div>
-                        <div className="flex">
-                            <h1 className="w-[30%] text-gray-400">Продюсер</h1>
-                            <h1 className="w-[70%]">{film.persons
-                                .filter((person) => person.profession_text === "Продюсеры") 
-                                .map((person) => person.name_ru || person.name_en)
-                                .join(", ") || "Не указано"}
-                            </h1>
-                        </div>
-                        <div className="flex">
-                            <h1 className="w-[30%] text-gray-400">Сценарий</h1>
-                            <h1 className="w-[70%]">{film.persons
-                                .filter((person) => person.profession_text === "Сценаристы") 
-                                .map((person) => person.name_ru || person.name_en)
-                                .join(", ") || "Не указано"}
-                            </h1>
-                        </div>
-                        <div className="flex">
-                            <h1 className="w-[30%] text-gray-400">Оператор</h1>
-                            <h1 className="w-[70%]">{film.persons
-                                .filter((person) => person.profession_text === "Операторы") 
-                                .map((person) => person.name_ru || person.name_en)
-                                .join(", ") || "Не указано"}
-                            </h1>
-                        </div>
-                        <div className="flex">
-                            <h1 className="w-[30%] text-gray-400">Монтаж</h1>
-                            <h1 className="w-[70%]">{film.persons
-                                .filter((person) => person.profession_text === "Монтажеры") 
-                                .map((person) => person.name_ru || person.name_en)
-                                .join(", ") || "Не указано"}
-                            </h1>
-                        </div>
-                        <div className="flex">
-                            <h1 className="w-[30%] text-gray-400">Художник</h1>
-                            <h1 className="w-[70%]">{film.persons
-                                .filter((person) => person.profession_text === "Художники") 
-                                .map((person) => person.name_ru || person.name_en)
-                                .join(", ") || "Не указано"}
-                            </h1>
-                        </div>
-                        {/* <div className="flex">
-                            <h1 className="w-[30%] text-gray-400">Время</h1>
-                            <h1 className="w-[70%]">{Math.floor(film.movieLength / 60)} ч {film.movieLength - Math.floor(film.movieLength / 60) * 60} мин</h1>
-                        </div> */}
-                        
+                    <h1 className="font-bold text-lg">О фильме</h1>
+                    <div className="grid grid-cols-2 text-xs gap-2">
+                        <h1 className="text-gray-400">Год производства</h1>
+                        <h1>{film.year}</h1>
+
+                        <h1 className="text-gray-400">Страна</h1>
+                        <h1>{film.countries.map(c => c.country).join(", ")}</h1>
+
+                        <h1 className="text-gray-400">Жанр</h1>
+                        <h1>{film.genres.map(g => g.genre).join(", ")}</h1>
+
+                        <h1 className="text-gray-400">Режиссер</h1>
+                        <h1>{film.persons.filter(p => p.profession_text === "Режиссеры").map(p => p.name_ru || p.name_en).join(", ") || "Не указано"}</h1>
                     </div>
                 </div>
-                <div className="w-[30%] text-center">
+
+                {/* Правая колонка с рейтингом и актерами */}
+                <div className="w-1/4 text-center">
                     <h1 className="text-xl font-semibold">{film.rating_kinopoisk}</h1>
-                    <h1 className="mt-[60px] top-20 font-bold">В главных ролях</h1>
-                    <div className="flex flex-col ml-29 mt-2 text-start gap-2">
+                    <h1 className="mt-10 font-bold">В главных ролях</h1>
+                    <div className="mt-2 text-start space-y-2">
                         {film.persons
-                            .filter((person) => person.profession_text === "Актеры")
+                            .filter(p => p.profession_text === "Актеры")
                             .slice(0, 9)
-                            .map((person) => (
-                                <h1 key={person.staff_id} className="text-sm">{person.name_ru || person.name_en}</h1>
+                            .map(p => (
+                                <h1 key={p.staff_id} className="text-sm">{p.name_ru || p.name_en}</h1>
                             ))}
                     </div>
-                    <Button className="!text-[12px] !justify-center !text-blue-600" 
-                            disableRipple 
-                            sx={{ "&:hover": { backgroundColor: "transparent", textDecoration: "underline"  } }}>
-                                {film.persons.filter((person) => person.profession_text === "Актеры").length} актер(-ов)
-                    </Button>
-
+                    <Button className="!text-[12px] !text-blue-600 hover:underline">{film.persons.filter(p => p.profession_text === "Актеры").length} актер(-ов)</Button>
                 </div>
             </div>
+
+            {/* TabsPanel вынесен отдельно, под общей информацией */}
+            <div className="w-[80%] mt-10">
+                <TabsPanel description={film.description} />
+            </div>
         </div>
+
     );
 };
 

@@ -27,10 +27,18 @@ exports.getMoviesFromAPI = async (req, res) => {
         for (const movie of movies) {
             const { kinopoiskId, imdbId, nameRu, nameOriginal, nameEn, countries, genres, posterUrl, posterUrlPreview, ratingImdb, ratingKinopoisk, type, year } = movie;
 
+            const moreInfoAboutMovies = await axios.get(`https://kinopoiskapiunofficial.tech/api/v2.2/films/${kinopoiskId}`, {
+                headers: {
+                    'X-API-KEY': API_KEY
+                }
+            });
+
+            const { filmLength, description, ratingAgeLimits } = moreInfoAboutMovies.data
+
             try {
                 await pool.query(
-                    'INSERT INTO movies (imdb_id, kinopoisk_id, name_ru, name_original, name_en, countries, genres, poster_url, poster_url_preview, rating_imdb, rating_kinopoisk, type, year) ' + 
-                    'VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14) ' +
+                    'INSERT INTO movies (imdb_id, kinopoisk_id, name_ru, name_original, name_en, countries, genres, poster_url, poster_url_preview, rating_imdb, rating_kinopoisk, type, year, movie_length, description, rating_age_limits) ' + 
+                    'VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16) ' +
                     'ON CONFLICT (kinopoisk_id) DO NOTHING', 
                     [
                         imdbId, 
@@ -45,9 +53,13 @@ exports.getMoviesFromAPI = async (req, res) => {
                         ratingImdb, 
                         ratingKinopoisk, 
                         type, 
-                        year
+                        year,
+                        filmLength, 
+                        description,
+                        ratingAgeLimits
                     ]
                 );
+                
             } catch (dbError) {
                 console.error('Ошибка при вставке в базу данных отношение movies:', dbError.message);
             }
