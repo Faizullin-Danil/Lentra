@@ -60,6 +60,22 @@ exports.getMoviesFromAPI = async (req, res) => {
     }
 };
 
+exports.getAboutMovieFromAPI = async (req, res) => {
+    try {
+        const { kinopoisk_id } = req.params
+
+        const response = await axios.get(`https://kinopoiskapiunofficial.tech/api/v2.2/films/${kinopoisk_id}`, {
+            headers: {
+                'X-API-KEY': API_KEY
+            }
+        });
+
+        res.json(response.data);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
 exports.getAllMovies = async (req, res) => {
     try {
         const result = await pool.query('select * from movies');

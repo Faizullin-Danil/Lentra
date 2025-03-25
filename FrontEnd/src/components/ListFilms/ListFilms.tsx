@@ -25,7 +25,7 @@ const ListFilms: React.FC<ListFilmProps> = ({ films }) => {
           enName={film.name_original}
           countries={film.countries?.length > 0 ? film.countries.map((country) => country.country).join(", ") : "Не указано"}
           year={film.year}
-          genres={film.genres?.length > 0 ? film.genres?.map((genre) => genre.genre).join(", ") : <h1>не указано</h1>}
+          genres={film.genres?.length > 0 ? film.genres?.map((genre) => genre.genre).join(", ") : <p>не указано</p>}
           actors={
             film.persons
               ?.filter((person) => person.profession_text === "Актеры")

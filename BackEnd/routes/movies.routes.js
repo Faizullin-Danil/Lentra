@@ -6,8 +6,11 @@ const favouritemovie = require('../controllers/favouritesMovies.controller')
 
 router.get('/fetch-movies', moviesController.getMoviesFromAPI);
 router.get('/movies', moviesController.getAllMovies);
+router.get('/movie/:kinopoisk_id', moviesController.getAboutMovieFromAPI)
+
 router.get('/persons', personsController.getPersonsByMovieFromAPI);
 router.get('/movie/:kinopoisk_id/persons', personsController.getPersonsByKinopoiskId);
+
 router.post('/favouritemovie/:kinopoisk_id', favouritemovie.addFavouriteMovie);
 router.delete('/favouritemovie/:kinopoisk_id', favouritemovie.deleteFavouriteMovie);
 router.get('/favouritemovie', favouritemovie.getAllFavouritesMovies);

@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from "../../store/store"; 
 import { addFavouriteFilm, deleteFavouriteFilm } from '../../store/FavouriteFilmsSlice';
 import { Link } from 'react-router-dom';
+import { deleteFavouriteFilm as deleteFavouriteFilmFromAPI, addFavouriteFilm as addFavouriteFilmFormAPI } from "../../services/apiService"
 
 interface FilmProps {
   film: object,
@@ -25,19 +26,21 @@ interface FilmProps {
 const FilmCard: React.FC<FilmProps> = ({film, id, name, countries, year, genres, enName, actors, producer, rating, movieLength, poster}) => {
   const dispatch = useDispatch()
   const favouritesFilms = useSelector((state: RootState) => state.favouritesFilms.value)
-  const [isFavourite, setIsFavourite] = useState(favouritesFilms.some(favFilm => favFilm.kinopoiskId === id))
+  const [isFavourite, setIsFavourite] = useState(favouritesFilms.some(favFilm => favFilm.kinopoisk_id === id))
 
-  console.log(favouritesFilms)
-  
   useEffect(() => {
-    setIsFavourite(favouritesFilms.some(favFilm => favFilm.kinopoiskId === id))
-  }, [favouritesFilms, id])
+    setIsFavourite(favouritesFilms.some(favFilm => favFilm.kinopoisk_id === id));
+  }, [favouritesFilms, id]);
 
   const handleToggleFavourite = () => {
     if (isFavourite) {
       dispatch(deleteFavouriteFilm(id))
+      deleteFavouriteFilmFromAPI(id)
+      setIsFavourite(false)
     } else {
       dispatch(addFavouriteFilm(film))
+      addFavouriteFilmFormAPI(id)
+      setIsFavourite(true)
     }
   }
 
@@ -48,12 +51,12 @@ const FilmCard: React.FC<FilmProps> = ({film, id, name, countries, year, genres,
         <Link to={`/film/${id}`} state={{film}} className='flex gap-5 w-[70%]'>
           <img src={poster} className='w-20 h-32' />
           <div className='cursor-pointer'>
-            <h1 className='text-xl font-bold'>{name}</h1>
-            <h1 className='text-l font-semibold'>{enName}, {year}, {Math.floor(movieLength / 60)} ч {movieLength - Math.floor(movieLength / 60) * 60} мин</h1>
-            <h3 className='text-m font-normal text-gray-400'>Страна: {countries}</h3>
-            <h3 className='text-m font-normal text-gray-400 flex gap-1'>Жанр: {genres}</h3>
-            {producer.length > 0 ? <h1 className='font-normal text-gray-400'>Продюсер: {producer}</h1> : <h1 className='font-normal text-gray-400'>Продюсер: не указано</h1>}
-            {actors.length > 0 ? <h1 className='font-normal text-gray-400'>В ролях: {actors}</h1> : <h1 className='font-normal text-gray-400'>В ролях: не указано</h1>}
+            <h2 className='text-xl font-bold'>{name}</h2>
+            <h3 className='text-l font-semibold'>{enName}, {year}, {Math.floor(movieLength / 60)} ч {movieLength - Math.floor(movieLength / 60) * 60} мин</h3>
+            <h4 className='text-m font-normal text-gray-400'>Страна: {countries}</h4>
+            <h4 className='text-m font-normal text-gray-400 flex gap-1'>Жанр: {genres}</h4>
+            {producer.length > 0 ? <h4 className='font-normal text-gray-400'>Продюсер: {producer}</h4> : <h4 className='font-normal text-gray-400'>Продюсер: не указано</h4>}
+            {actors.length > 0 ? <h4 className='font-normal text-gray-400'>В ролях: {actors}</h4> : <h4 className='font-normal text-gray-400'>В ролях: не указано</h4>}
           </div>
         </Link>
 

@@ -4,56 +4,59 @@ import Filter from "../../components/Filter/Filter";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { useEffect, useState } from "react";
-import { setFilms } from "../../store/FilmsSlice";
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 import { setClearFilter } from "../../store/FilmsSlice";
-import { fetchFilms, fetchPersons } from "../../services/apiService"; 
+import { fetchFilms, fetchFavouritesFilms } from "../../services/apiService"; 
 import { CircularProgress } from '@mui/material';
 
 const MainPage = () => {
   const films = useSelector((state: RootState) => state.films.value);
+  const favouritesFilms = useSelector((state: RootState) => state.favouritesFilms.value);
   const openAlert = useSelector((state: RootState) => state.alert.value);
   const [ isLoading, setIsLoading ] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (films.length === 0) {
-
+    if (films.length === 0) {  // Загружать только если фильмов нет
       const loadFilms = async () => {
-        setIsLoading(true)
+        setIsLoading(true);
         try {
-          const filmsData = await fetchFilms();
-          if (filmsData && Array.isArray(filmsData)) {
-            const filmsWithPersons = await Promise.all(filmsData.map(async (film) => {
-              try {
-                const personsData = await fetchPersons(film.kinopoisk_id);
-                return { ...film, persons: personsData || [] };  
-              } catch (error) {
-                console.error(`Ошибка при получении персон для фильма с ID ${film.kinopoisk_id}:`, error);
-                return { ...film, persons: [] };
-              }
-            }));
-
-            dispatch(setFilms(filmsWithPersons));
-          } else {
-            throw new Error("Данные фильмов не содержат массив 'items'");
-          }
+          await fetchFilms(dispatch);
         } catch (error) {
-          console.error("Ошибка загрузки данных:", error);
+          console.error("Ошибка загрузки фильмов:", error);
         } finally {
-          setIsLoading(false)
+          setIsLoading(false);
         }
       };
+  
       loadFilms();
     }
 
+    if (favouritesFilms.length === 0) {  // Загружать только если фильмов нет
+      const loadFilms = async () => {
+        setIsLoading(true);
+        try {
+          await fetchFavouritesFilms(dispatch);
+        } catch (error) {
+          console.error("Ошибка загрузки избранных фильмов:", error);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+  
+      loadFilms();
+    }
+  
     return () => {
       dispatch(setClearFilter());
     };
-  }, [dispatch]);
+  }, [dispatch]); // Теперь ререндер только при изменении dispatch
+  
 
-  console.log(films);
+  // console.log("фильмы", films);
+  // console.log("избранные фильмы", favouritesFilms);
+
 
   return (
     <div className="mt-[70px] flex justify-center">

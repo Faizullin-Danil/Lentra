@@ -5,17 +5,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { addFavouriteFilm, deleteFavouriteFilm } from '../../store/FavouriteFilmsSlice';
 import { FaRegStar, FaStar } from "react-icons/fa";
+import { deleteFavouriteFilm as deleteFavouriteFilmFromAPI, addFavouriteFilm as addFavouriteFilmFormAPI } from "../../services/apiService"
 
 
 const FilmPage = () => {
     const location = useLocation();
     const { film } = location.state || {}; 
     const favouritesFilms = useSelector((state: RootState) => state.favouritesFilms.value)
-    const [isFavourite, setIsFavourite] = useState(favouritesFilms.some(favFilm => favFilm.id === film.id))
+    const [isFavourite, setIsFavourite] = useState(favouritesFilms.some(favFilm => favFilm.kinopoisk_id === film.kinopoisk_id))
     const dispatch = useDispatch()
 
     useEffect(() => {
-        setIsFavourite(favouritesFilms.some(favFilm => favFilm.id === film.id))
+        setIsFavourite(favouritesFilms.some(favFilm => favFilm.kinopoisk_id === film.kinopoisk_id))
     }, [favouritesFilms, film.id])
 
     const roundToDecimal = (num: number, decimalPlaces: number) => {
@@ -25,9 +26,13 @@ const FilmPage = () => {
 
     const handleToggleFavourite = () => {
         if (isFavourite) {
-          dispatch(deleteFavouriteFilm(film.id))
+            dispatch(deleteFavouriteFilm(film.kinopoisk_id))
+            deleteFavouriteFilmFromAPI(film.kinopoisk_id)
+            setIsFavourite(false)
         } else {
-          dispatch(addFavouriteFilm(film))
+            dispatch(addFavouriteFilm(film))
+            addFavouriteFilmFormAPI(film.kinopoisk_id)
+            setIsFavourite(true)
         }
     }
 
@@ -55,7 +60,8 @@ const FilmPage = () => {
                     <Button className="flex w-[250px] cursor-pointer !bg-gray-200 rounded-4xl !text-black text-3xl transition duration-300 hover:!bg-gray-300" onClick={handleToggleFavourite}>
                         {isFavourite 
                             ? <h1 className="flex items-center gap-2">убрать из избранного</h1> 
-                            : <h1 className="flex items-center gap-2">Добавить в избранное</h1>}
+                            : <h1 className="flex items-center gap-2">Добавить в избранное</h1>
+                        }
                     </Button>
                     <h1 className="font-bold text-lg">О фильме</h1>
                     <div className="text-xs flex flex-col gap-2">
