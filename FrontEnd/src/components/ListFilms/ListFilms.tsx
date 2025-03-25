@@ -34,7 +34,7 @@ const ListFilms: React.FC<ListFilmProps> = ({ films }) => {
               .join(", ")
           }
           rating={film.ratingKinopoisk}
-          movieLength={film.movieLength}
+          movieLength={film.movie_length}
           producer={
             film.persons
               ?.filter((person) => person.profession_text === "Продюсеры")

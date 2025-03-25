@@ -19,8 +19,8 @@ export const FavouritesFilmsSlice = createSlice({
             state.allFavouritesFilms = [...state.allFavouritesFilms, newFilm]
         },
         deleteFavouriteFilm: (state, action) => {
-            state.value = state.value.filter(favouriteFilm => favouriteFilm.kinopoiskId !== action.payload) // id на kinopoiskId
-            state.allFavouritesFilms = state.allFavouritesFilms.filter(favouriteFilm => favouriteFilm.kinopoiskId !== action.payload) // id на kinopoiskId
+            state.value = state.value.filter(favouriteFilm => favouriteFilm.kinopoisk_id !== action.payload) // id на kinopoiskId
+            state.allFavouritesFilms = state.allFavouritesFilms.filter(favouriteFilm => favouriteFilm.kinopoisk_id !== action.payload) // id на kinopoiskId
         },
         setFavouriteCountry: (state, action) => {
             state.value = state.allFavouritesFilms.filter(film => 
