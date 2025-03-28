@@ -13,7 +13,7 @@ function App() {
       <Provider store={store}>
         <div className='flex flex-col min-h-screen'>
           <Header/>
-          <div className='flex-1'>
+          <div className='flex-1 mt-[70px]'>
             <Router/>
           </div>
           <Footer/>

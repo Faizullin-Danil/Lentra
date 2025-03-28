@@ -2,11 +2,12 @@ import { RootState } from "@/store/store";
 import { Button } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import { addFavouriteFilm, deleteFavouriteFilm } from '../../store/FavouriteFilmsSlice';
 import { FaRegStar, FaStar } from "react-icons/fa";
 import { deleteFavouriteFilm as deleteFavouriteFilmFromAPI, addFavouriteFilm as addFavouriteFilmFormAPI } from "../../services/apiService"
 import TabsPanel from "../../components/TabsPanel/TabsPanel";
+import { Link } from 'react-router-dom';
 
 
 const FilmPage = () => {
@@ -42,18 +43,15 @@ const FilmPage = () => {
     return (
         <div className="mt-[80px] flex flex-col items-center">
             <div className="w-[80%] flex gap-10">
-                {/* Левая колонка с постером */}
                 <div className="w-1/3 flex flex-col gap-5">
                     <img src={film.poster_url} className="w-50 h-70 object-cover" />
                 </div>
 
-                {/* Центральная колонка с описанием */}
                 <div className="w-1/2 flex flex-col space-y-2">
                     <h1 className="flex items-center gap-4 text-2xl font-bold">
                         {film.name_ru} ({film.year})
                         {isFavourite ? <FaStar className="text-4xl p-2" /> : <FaRegStar className="text-4xl p-2" />}
                     </h1>
-                    <h1 className="text-xs" style={{ textIndent: '3rem' }}>{film.description}</h1>
                     <Button className="flex w-[250px] cursor-pointer !bg-gray-200 rounded-4xl !text-black text-3xl transition duration-300 hover:!bg-gray-300" onClick={handleToggleFavourite}>
                         {isFavourite 
                             ? <h1 className="flex items-center gap-2">убрать из избранного</h1> 
@@ -76,7 +74,6 @@ const FilmPage = () => {
                     </div>
                 </div>
 
-                {/* Правая колонка с рейтингом и актерами */}
                 <div className="w-1/4 text-center">
                     <h1 className="text-xl font-semibold">{film.rating_kinopoisk}</h1>
                     <h1 className="mt-10 font-bold">В главных ролях</h1>
@@ -88,14 +85,19 @@ const FilmPage = () => {
                                 <h1 key={p.staff_id} className="text-sm">{p.name_ru || p.name_en}</h1>
                             ))}
                     </div>
-                    <Button className="!text-[12px] !text-blue-600 hover:underline">{film.persons.filter(p => p.profession_text === "Актеры").length} актер(-ов)</Button>
+                    <Link to={`/actorsByfilm/${film.kinopoisk_id}`} state={{film}}>
+                        <Button className="!text-[12px] !text-blue-600 hover:underline">
+                            {film.persons.filter(p => p.profession_text === "Актеры").length} актер(-ов)
+                        </Button>
+                    </Link>
+                    
                 </div>
             </div>
 
-            {/* TabsPanel вынесен отдельно, под общей информацией */}
             <div className="w-[80%] mt-10">
                 <TabsPanel description={film.description} />
             </div>
+            
         </div>
 
     );

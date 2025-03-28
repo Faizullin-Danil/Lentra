@@ -18,7 +18,7 @@ const MainPage = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (films.length === 0) {  // Загружать только если фильмов нет
+    if (films.length === 0) {  
       const loadFilms = async () => {
         setIsLoading(true);
         try {
@@ -33,7 +33,7 @@ const MainPage = () => {
       loadFilms();
     }
 
-    if (favouritesFilms.length === 0) {  // Загружать только если фильмов нет
+    if (favouritesFilms.length === 0) {  
       const loadFilms = async () => {
         setIsLoading(true);
         try {
@@ -51,7 +51,7 @@ const MainPage = () => {
     return () => {
       dispatch(setClearFilter());
     };
-  }, [dispatch]); // Теперь ререндер только при изменении dispatch
+  }, [dispatch]); 
   
 
   // console.log("фильмы", films);
@@ -59,7 +59,7 @@ const MainPage = () => {
 
 
   return (
-    <div className="mt-[70px] flex justify-center">
+    <div className="flex justify-center">
       {isLoading ? (
         <div className="flex items-center justify-center h-[80vh] w-full">
           <CircularProgress />

@@ -7,7 +7,7 @@ const Header = () => {
         <Link to="/" className="lg:ml-22">
           <h1 className="">Фильмы</h1>
         </Link>
-        <Link to="/FavoutitesFilmsPage" className="lg:mr-22">
+        <Link to="/FavouritesFilmsPage" className="lg:mr-22">
           <h2 className="">Избранное</h2>
         </Link>
     </div>

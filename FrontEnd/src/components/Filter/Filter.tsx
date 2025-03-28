@@ -65,7 +65,6 @@ const Filter: React.FC<FilterProps> = ({ whichPage }) => {
       } else {
         dispatch(openAlertWithTimeout())
       }
-
     }
   };
 

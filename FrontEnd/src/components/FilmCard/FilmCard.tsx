@@ -27,7 +27,6 @@ const FilmCard: React.FC<FilmProps> = ({film, id, name, countries, year, genres,
   const dispatch = useDispatch()
   const favouritesFilms = useSelector((state: RootState) => state.favouritesFilms.value)
   
-  // Проверяем, является ли фильм избранным, основываясь на данных в Redux
   const isFavourite = favouritesFilms.some(favFilm => favFilm.kinopoisk_id === id)
 
   const formattedMovieLength = movieLength < 60 
