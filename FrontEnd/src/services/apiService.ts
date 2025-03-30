@@ -2,7 +2,7 @@ import axios from 'axios'
 import { setFilms } from "../store/FilmsSlice";
 import { setFavouritesFilms } from "../store/FavouriteFilmsSlice";
 
-export const fetchFilms = async (dispatch) => {  // Получаем dispatch как параметр
+export const fetchFilms = async (dispatch) => {  
   try {
     const response = await axios.get('http://localhost:3000/api/movies');
     const films = response.data;
@@ -18,7 +18,7 @@ export const fetchFilms = async (dispatch) => {  // Получаем dispatch к
         }
       }));
 
-      dispatch(setFilms(filmsWithPersons));  // Теперь dispatch корректно вызывается
+      dispatch(setFilms(filmsWithPersons));  
     } else {
       throw new Error("Данные фильмов не содержат массив 'items'");
     }
@@ -30,7 +30,7 @@ export const fetchFilms = async (dispatch) => {  // Получаем dispatch к
 
 export const fetchFavouritesFilms = async (dispatch) => {
   try {
-    const response = await axios.get('http://localhost:3000/api/favouritemovie');
+    const response = await axios.get('http://localhost:3000/api/favouritesmovies');
     const favouritesFilms = response.data;
 
     if (favouritesFilms && Array.isArray(favouritesFilms)) {
@@ -56,7 +56,7 @@ export const fetchFavouritesFilms = async (dispatch) => {
 
 export const fetchPersons = async (kinopoisk_id: number) => {
   try {
-    const response = await axios.get(`http://localhost:3000/api/movie/${kinopoisk_id}/persons`)
+    const response = await axios.get(`http://localhost:3000/api/persons/movie/${kinopoisk_id}`)
     return response.data;
   } catch (error) {
     console.error("Ошибка при загрузке данных персон:", error);
@@ -66,7 +66,7 @@ export const fetchPersons = async (kinopoisk_id: number) => {
 
 export const deleteFavouriteFilm = async (kinopoisk_id: number) => {
   try {
-    const response = await axios.delete(`http://localhost:3000/api/favouritemovie/${kinopoisk_id}`)
+    const response = await axios.delete(`http://localhost:3000/api/favouritesmovies/${kinopoisk_id}`)
   } catch (error) {
     console.error("Ошибка при удалении фильма из избранных:", error)
     throw error
@@ -75,27 +75,9 @@ export const deleteFavouriteFilm = async (kinopoisk_id: number) => {
 
 export const addFavouriteFilm = async (kinopoisk_id: number) => {
   try {
-    const response = await axios.post(`http://localhost:3000/api/favouritemovie/${kinopoisk_id}`)
+    const response = await axios.post(`http://localhost:3000/api/favouritesmovies/${kinopoisk_id}`)
   } catch (error) {
     console.error("Ошибка при добавдении фильма в избранные:", error)
     throw error
   }
 }
-
-// export const deleteFavouriteFilm = async (kinopoisk_id: number) => {
-//   try {
-//     const response = await axios.delete(`http://localhost:3000/api/favouritemovie/${kinopoisk_id}`)
-//   } catch (error) {
-//     console.error("Ошибка при удалении фильма из избранных:", error)
-//     throw error
-//   }
-// }
-
-// export const addFavouriteFilm = async (kinopoisk_id: number) => {
-//   try {
-//     const response = await axios.post(`http://localhost:3000/api/favouritemovie/${kinopoisk_id}`)
-//   } catch (error) {
-//     console.error("Ошибка при добавдении фильма в избранные:", error)
-//     throw error
-//   }
-// }

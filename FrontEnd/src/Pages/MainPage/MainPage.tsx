@@ -54,9 +54,7 @@ const MainPage = () => {
   }, [dispatch]); 
   
 
-  // console.log("фильмы", films);
-  // console.log("избранные фильмы", favouritesFilms);
-
+  console.log("фильмы", films);
 
   return (
     <div className="flex justify-center">

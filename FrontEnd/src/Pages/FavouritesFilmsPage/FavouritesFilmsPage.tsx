@@ -15,7 +15,7 @@ const FavouritesFilmsPage = () => {
 
 
     return (
-        <div className="mt-[70px] w-full flex justify-center">
+        <div className="w-full flex justify-center">
             {isLoading ? ( // Если идёт загрузка — показываем индикатор
                 <div className="flex justify-center items-center h-[90vh]">
                     <CircularProgress size={60} />
