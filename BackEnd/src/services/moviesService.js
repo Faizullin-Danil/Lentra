@@ -3,6 +3,7 @@ const movieRepository = require('../repositories/moviesRepository');
 require('dotenv').config();
 
 const API_URL_AllMovies = 'https://kinopoiskapiunofficial.tech/api/v2.2/films';
+const API_KEY = process.env.API_KEY;
 
 exports.fetchAndSaveMovies = async () => {
     try {

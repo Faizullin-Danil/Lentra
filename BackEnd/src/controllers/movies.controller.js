@@ -1,4 +1,4 @@
-const movieService = require('../services/movieService');
+const movieService = require('../services/moviesService');
 
 exports.getMoviesFromAPI = async (req, res) => {
     try {

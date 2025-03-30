@@ -1,0 +1,60 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model favouritesmovies {
+  id                 Int      @id @default(autoincrement())
+  imdb_id            String?  @unique @db.VarChar(20)
+  kinopoisk_id       Int?     @unique
+  name_en            String?
+  name_original      String?
+  name_ru            String?
+  countries          Json?
+  genres             Json?
+  persons            Json?
+  poster_url         String?
+  poster_url_preview String?
+  rating_imdb        Decimal? @db.Decimal(3, 1)
+  rating_kinopoisk   Decimal? @db.Decimal(3, 1)
+  type               String?  @db.VarChar(10)
+  year               Int?
+}
+
+model movies {
+  id                 Int      @id @default(autoincrement())
+  imdb_id            String?  @unique @db.VarChar(20)
+  kinopoisk_id       Int?     @unique
+  name_en            String?
+  name_original      String?
+  name_ru            String?
+  countries          Json?
+  genres             Json?
+  persons            Json?
+  poster_url         String?
+  poster_url_preview String?
+  rating_imdb        Decimal? @db.Decimal(3, 1)
+  rating_kinopoisk   Decimal? @db.Decimal(3, 1)
+  type               String?  @db.VarChar(10)
+  year               Int?
+  movie_length       Int?
+  description        String?
+  rating_age_limits  String?
+  videos             Json?
+}
+
+model persons {
+  id              Int     @id @default(autoincrement())
+  staff_id        Int     @unique
+  kinopoisk_id    Int?
+  name_en         String?
+  name_ru         String?
+  description     String?
+  poster_url      String?
+  profession_text String?
+  profession_key  String? @db.VarChar(50)
+}

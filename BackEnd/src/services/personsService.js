@@ -3,6 +3,8 @@ const personRepository = require('../repositories/personsRepository');
 const pool = require('../config/db');
 require('dotenv').config();
 
+const API_KEY = process.env.API_KEY;
+
 exports.fetchAndSavePersonsByMovies = async () => {
     try {
         const movies = await pool.query('SELECT id, kinopoisk_id FROM movies');
