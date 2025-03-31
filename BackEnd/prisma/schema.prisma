@@ -23,6 +23,10 @@ model favouritesmovies {
   rating_kinopoisk   Decimal? @db.Decimal(3, 1)
   type               String?  @db.VarChar(10)
   year               Int?
+  movie_length       Int?
+  description        String?
+  rating_age_limits  String?
+  videos             Json?
 }
 
 model movies {

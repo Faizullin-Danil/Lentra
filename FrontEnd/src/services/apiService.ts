@@ -65,8 +65,9 @@ export const fetchPersons = async (kinopoisk_id: number) => {
 };
 
 export const deleteFavouriteFilm = async (kinopoisk_id: number) => {
+  console.log(typeof kinopoisk_id)
   try {
-    const response = await axios.delete(`http://localhost:3000/api/favouritesmovies/${kinopoisk_id}`)
+    await axios.delete(`http://localhost:3000/api/favouritesmovies/${kinopoisk_id}`)
   } catch (error) {
     console.error("Ошибка при удалении фильма из избранных:", error)
     throw error
@@ -75,7 +76,7 @@ export const deleteFavouriteFilm = async (kinopoisk_id: number) => {
 
 export const addFavouriteFilm = async (kinopoisk_id: number) => {
   try {
-    const response = await axios.post(`http://localhost:3000/api/favouritesmovies/${kinopoisk_id}`)
+    await axios.post(`http://localhost:3000/api/favouritesmovies/${kinopoisk_id}`)
   } catch (error) {
     console.error("Ошибка при добавдении фильма в избранные:", error)
     throw error

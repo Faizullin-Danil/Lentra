@@ -2,6 +2,8 @@ import * as React from 'react';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
+import TrailerComp from "../TrailerComp/TrailerComp"
+
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -32,14 +34,17 @@ function a11yProps(index: number) {
   };
 }
 
-const TabsPanel = (description) => {
+interface TabsPanelProps {
+  description: string | null
+  videos: [] | null
+}
+
+const TabsPanel: React.FC<TabsPanelProps> = ({description, videos}) => {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
-
-  console.log(description.description)
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -51,10 +56,20 @@ const TabsPanel = (description) => {
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
-        <h1>{description.description}</h1>
+        <h1>{description}</h1>
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-        Item Two
+        <div className='flex gap-2'>
+          
+          {videos.length > 0 
+            ? (videos?.map((video) => (
+                <TrailerComp videoUrl={video.url}/>
+              ))
+            ) : (
+              <div></div>
+            )}
+            
+        </div>
       </CustomTabPanel>
       <CustomTabPanel value={value} index={2}>
         Item Three

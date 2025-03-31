@@ -1,50 +1,65 @@
 const pool = require('../config/db');
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient();
 
 exports.getMovieByKinopoiskId = async (kinopoisk_id) => {
-    const query = `SELECT * FROM movies WHERE kinopoisk_id = $1`;
-    const result = await pool.query(query, [kinopoisk_id]);
+    const result = await prisma.movies.findUnique({
+        where: { kinopoisk_id: parseInt(kinopoisk_id, 10) }
+    });
 
-    if (result.rowCount === 0) {
-        return null;
+    if (!result) {
+        return null;  
     }
 
-    return result.rows[0];
+    return result;  
 };
 
 exports.checkIfMovieInFavourites = async (kinopoisk_id) => {
-    const query = `SELECT * FROM favouritesMovies WHERE kinopoisk_id = $1`;
-    const result = await pool.query(query, [kinopoisk_id]);
+    const result = await prisma.favouritesmovies.findUnique({
+        where: { kinopoisk_id: parseInt(kinopoisk_id, 10) }
+    });
 
-    return result.rowCount > 0 ? result.rows[0] : null;
+    if (!result) {
+        return null;  
+    }
+
+    return result;  
 };
 
+
 exports.addMovieToFavourites = async (movie) => {
-    const insertQuery = `
-        INSERT INTO favouritesMovies (
-            imdb_id, kinopoisk_id, name_en, name_original, name_ru,
-            countries, genres, persons, poster_url, poster_url_preview,
-            rating_imdb, rating_kinopoisk, type, year
-        ) VALUES (
-            $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14
-        ) RETURNING *;
-    `;
-
-    const values = [
-        movie.imdb_id, movie.kinopoisk_id, movie.name_en, movie.name_original, movie.name_ru,
-        JSON.stringify(movie.countries), JSON.stringify(movie.genres), JSON.stringify(movie.persons), movie.poster_url, movie.poster_url_preview,
-        movie.rating_imdb, movie.rating_kinopoisk, movie.type, movie.year
-    ];
-
-    await pool.query(insertQuery, values);
+    await prisma.favouritesmovies.create({
+        data: {
+            imdb_id: movie.imdb_id,
+            kinopoisk_id: movie.kinopoisk_id,
+            name_en: movie.name_en,
+            name_original: movie.name_original,
+            name_ru: movie.name_ru,
+            countries: movie.countries,
+            genres: movie.genres,
+            persons: movie.persons,
+            poster_url: movie.poster_url,
+            poster_url_preview: movie.poster_url_preview,
+            rating_imdb: movie.rating_imdb,
+            rating_kinopoisk: movie.rating_kinopoisk,
+            type: movie.type,
+            year: movie.year,
+            movie_length: movie.movie_length,
+            description: movie.description,
+            rating_age_limits: movie.rating_age_limits,
+            videos: movie.videos
+        }
+    });
 };
 
 exports.removeMovieFromFavourites = async (kinopoisk_id) => {
-    const query = `DELETE FROM favouritesMovies WHERE kinopoisk_id = $1`;
-    await pool.query(query, [kinopoisk_id]);
+    await prisma.favouritesmovies.delete({
+        where: { kinopoisk_id: parseInt(kinopoisk_id, 10) }
+    });
 };
 
 exports.getAllFavourites = async () => {
-    const query = `SELECT * FROM favouritesMovies`;
-    const result = await pool.query(query);
-    return result.rows;
+    const result = await prisma.favouritesmovies.findMany();
+    console.log(result)
+    return result;
 };

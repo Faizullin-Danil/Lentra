@@ -2,12 +2,13 @@ import { RootState } from "@/store/store";
 import { Button } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Outlet, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { addFavouriteFilm, deleteFavouriteFilm } from '../../store/FavouriteFilmsSlice';
 import { FaRegStar, FaStar } from "react-icons/fa";
 import { deleteFavouriteFilm as deleteFavouriteFilmFromAPI, addFavouriteFilm as addFavouriteFilmFormAPI } from "../../services/apiService"
 import TabsPanel from "../../components/TabsPanel/TabsPanel";
 import { Link } from 'react-router-dom';
+import TrailerComp from "../../components/TrailerComp/TrailerComp"
 
 
 const FilmPage = () => {
@@ -21,11 +22,6 @@ const FilmPage = () => {
         setIsFavourite(favouritesFilms.some(favFilm => favFilm.kinopoisk_id === film.kinopoisk_id))
     }, [favouritesFilms, film.id])
 
-    const roundToDecimal = (num: number, decimalPlaces: number) => {
-        const factor = Math.pow(10, decimalPlaces);
-        return Math.round(num * factor) / factor;
-    }
-
     const handleToggleFavourite = () => {
         if (isFavourite) {
             dispatch(deleteFavouriteFilm(film.kinopoisk_id))
@@ -38,18 +34,21 @@ const FilmPage = () => {
         }
     }
 
-    console.log(film);
+    console.log(film.videos);
 
     return (
         <div className="mt-[80px] flex flex-col items-center">
             <div className="w-[80%] flex gap-10">
                 <div className="w-1/3 flex flex-col gap-5">
                     <img src={film.poster_url} className="w-50 h-70 object-cover" />
+                    <TrailerComp videoUrl={film.videos[0].url}/>
+
                 </div>
+
 
                 <div className="w-1/2 flex flex-col space-y-2">
                     <h1 className="flex items-center gap-4 text-2xl font-bold">
-                        {film.name_ru} ({film.year})
+                        {film.name_ru || film.name_original} ({film.year})
                         {isFavourite ? <FaStar className="text-4xl p-2" /> : <FaRegStar className="text-4xl p-2" />}
                     </h1>
                     <Button className="flex w-[250px] cursor-pointer !bg-gray-200 rounded-4xl !text-black text-3xl transition duration-300 hover:!bg-gray-300" onClick={handleToggleFavourite}>
@@ -95,7 +94,7 @@ const FilmPage = () => {
             </div>
 
             <div className="w-[80%] mt-10">
-                <TabsPanel description={film.description} />
+                <TabsPanel description={film.description} videos={film.videos} />
             </div>
             
         </div>

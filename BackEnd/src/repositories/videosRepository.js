@@ -1,15 +1,30 @@
 const pool = require('../config/db');
-
-exports.getMovies = async () => {
-    const query = 'SELECT id, kinopoisk_id FROM movies';
-    const result = await pool.query(query);
-
-    return result.rows;
-};
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient();
 
 exports.getAllMovies = async () => {
-    const query = 'SELECT * FROM movies';
-    const result = await pool.query(query);
-
-    return result.rows;
+    try {
+        return await prisma.movies.findMany();
+    } catch (error) {
+        console.error("Ошибка при получении фильмов:", error.message);
+        throw new Error("Failed to retrieve movies");
+    }
 };
+
+
+exports.saveVideos = async (kinopoisk_id, videos) => {
+    try {
+        const updatedMovie = await prisma.movies.update({
+            where: { kinopoisk_id }, 
+            data: { videos: videos } 
+        });
+    
+        console.log(updatedMovie)
+
+        return updatedMovie
+
+    } catch (error) {
+        console.error("Ошибка в репозитории видео: ", error.message);
+        throw new Error("Failed to save videos in database");
+    }
+}

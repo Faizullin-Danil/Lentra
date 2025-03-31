@@ -24,8 +24,8 @@ exports.deleteFavouriteMovie = async (req, res) => {
 
 exports.getAllFavouritesMovies = async (req, res) => {
     try {
-        const favourites = await favouriteMovieService.getAllFavouritesMovies();
-        res.json(favourites);
+        const favouritesMovies = await favouriteMovieService.getAllFavouritesMovies();
+        res.json(favouritesMovies);
     } catch (error) {
         console.error('Ошибка при получении всех избранных фильмов:', error.message);
         res.status(500).json({ error: error.message });
