@@ -9,10 +9,6 @@ interface ListFilmProps {
 
 
 const ListFilms: React.FC<ListFilmProps> = ({ films }) => {
-  const roundToDecimal = (num: number, decimalPlaces: number) => {
-    const factor = Math.pow(10, decimalPlaces);
-    return Math.round(num * factor) / factor;
-  };
 
   return (
     <div className="w-[70%]">

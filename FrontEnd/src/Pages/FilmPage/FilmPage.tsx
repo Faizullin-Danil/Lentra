@@ -34,19 +34,26 @@ const FilmPage = () => {
         }
     }
 
-    console.log(film.videos);
+    console.log(film)
 
     return (
-        <div className="mt-[80px] flex flex-col items-center">
+        <div className="mt-[50px] flex flex-col items-center">
             <div className="w-[80%] flex gap-10">
-                <div className="w-1/3 flex flex-col gap-5">
-                    <img src={film.poster_url} className="w-50 h-70 object-cover" />
-                    <TrailerComp videoUrl={film.videos[0].url}/>
+                <div className="w-[25%] flex flex-col gap-5">
+                    <img src={film.poster_url} className="w-80 h-120 object-cover" />
+                    {film.videos.length > 0 ? (
+                        <div>
+                            <TrailerComp videoUrl={film.videos[0].url} site={film.videos[0].site} height="50"/>
+                            <h1 className="text-l">Трейлер</h1>
+                        </div>
+                    ) : (
+                        <div></div>               
+                    )}
 
                 </div>
 
 
-                <div className="w-1/2 flex flex-col space-y-2">
+                <div className="w-[50%] flex flex-col space-y-2">
                     <h1 className="flex items-center gap-4 text-2xl font-bold">
                         {film.name_ru || film.name_original} ({film.year})
                         {isFavourite ? <FaStar className="text-4xl p-2" /> : <FaRegStar className="text-4xl p-2" />}
@@ -70,10 +77,34 @@ const FilmPage = () => {
 
                         <h1 className="text-gray-400">Режиссер</h1>
                         <h1>{film.persons.filter(p => p.profession_text === "Режиссеры").map(p => p.name_ru || p.name_en).join(", ") || "Не указано"}</h1>
+
+                        <h1 className="text-gray-400">Художник</h1>
+                        <h1>{film.persons.filter(p => p.profession_text === "Художники").map(p => p.name_ru || p.name_en).join(", ") || "Не указано"}</h1>
+
+                        <h1 className="text-gray-400">Оператор</h1>
+                        <h1>{film.persons.filter(p => p.profession_text === "Операторы").map(p => p.name_ru || p.name_en).join(", ") || "Не указано"}</h1>
+
+                        <h1 className="text-gray-400">Режиссер дубляжа</h1>
+                        <h1>{film.persons.filter(p => p.profession_text === "Режиссеры дубляжа").map(p => p.name_ru || p.name_en).join(", ") || "Не указано"}</h1>
+
+                        <h1 className="text-gray-400">Продюсер</h1>
+                        <h1>{film.persons.filter(p => p.profession_text === "Продюсеры").map(p => p.name_ru || p.name_en).join(", ") || "Не указано"}</h1>
+
+                        <h1 className="text-gray-400">Монтажер</h1>
+                        <h1>{film.persons.filter(p => p.profession_text === "Монтажеры").map(p => p.name_ru || p.name_en).join(", ") || "Не указано"}</h1>
+
+                        <h1 className="text-gray-400">Композитор</h1>
+                        <h1>{film.persons.filter(p => p.profession_text === "Композиторы").map(p => p.name_ru || p.name_en).join(", ") || "Не указано"}</h1>
+
+                        <h1 className="text-gray-400">Сценарист</h1>
+                        <h1>{film.persons.filter(p => p.profession_text === "Сценаристы").map(p => p.name_ru || p.name_en).join(", ") || "Не указано"}</h1>
+
+                        <h1 className="text-gray-400">Переводчик</h1>
+                        <h1>{film.persons.filter(p => p.profession_text === "Переводчики").map(p => p.name_ru || p.name_en).join(", ") || "Не указано"}</h1>
                     </div>
                 </div>
 
-                <div className="w-1/4 text-center">
+                <div className="w-[25%] text-center">
                     <h1 className="text-xl font-semibold">{film.rating_kinopoisk}</h1>
                     <h1 className="mt-10 font-bold">В главных ролях</h1>
                     <div className="mt-2 text-start space-y-2">

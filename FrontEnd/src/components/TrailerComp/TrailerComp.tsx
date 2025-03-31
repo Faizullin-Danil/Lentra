@@ -1,71 +1,85 @@
 import { Button, Dialog } from "@mui/material";
 import React, { useState } from "react";
-import PlayArrowRoundedIcon from '@mui/icons-material/PlayArrowRounded';
-import CloseIcon from '@mui/icons-material/Close';
+import YouTubeIcon from '@mui/icons-material/YouTube';
+import TheatersIcon from '@mui/icons-material/Theaters';
 
 interface TrailerCompProps {
     videoUrl?: string,
+    site?: string,
+    width?: string,
+    height?: string
 }
 
-const TrailerComp: React.FC<TrailerCompProps> = ({ videoUrl }) => {
+const TrailerComp: React.FC<TrailerCompProps> = ({ videoUrl, width, height }) => {
     const [open, setOpen] = useState(false);
     const [hovered, setHovered] = useState(false);
 
-    const isYouTube = videoUrl?.includes("youtube.com");
 
-    const embedUrl = videoUrl && videoUrl.includes("youtube.com")
+    const youtubeUrl = videoUrl && videoUrl.includes("youtube.com")
         ? videoUrl.replace("watch?v=", "embed/")
         : videoUrl;
 
-    const handleOpen = () => {
-        if (isYouTube) {
-            setOpen(true);
-        }
-    };
+    const isYoutube = videoUrl?.includes("youtube.com");
 
-    const handleClose = () => {
-        setOpen(false);  
+    const handleOpenVideo = () => {
+        window.open(videoUrl, "_blank");
     };
-    console.log(embedUrl)
-    // console.log(isYouTube)
 
     return (
-        <div className="w-50 h-30 relative">
-            <Button
-                className="!p-0 relative w-full h-full"
-                onClick={handleOpen}
-                onMouseEnter={() => setHovered(true)}
-                onMouseLeave={() => setHovered(false)}
-            >
-                {isYouTube ? (
+        isYoutube ? (<div className={`w-${width} h-${height} relative`}>
+                <Button
+                    className="!p-0 relative w-full h-full"
+                    onClick={() => setOpen(true)}
+                    onMouseEnter={() => setHovered(true)}
+                    onMouseLeave={() => setHovered(false)}
+                >
                     <div className="bg-black w-full h-full flex items-center justify-center">
-                        <PlayArrowRoundedIcon className="absolute bg-black" />
+                        <YouTubeIcon color="error" className="absolute bg-black" />
                     </div>                    
-                ) : (
-                    <div className="bg-black w-full h-full flex items-center justify-center">
-                        <CloseIcon className="absolute bg-black" />
-                    </div>
-                )}
-                {hovered && (
-                    isYouTube ? (
-                        <PlayArrowRoundedIcon className="absolute bg-black" fontSize="large" />
-                    ) : (
-                        <CloseIcon className="absolute bg-black" fontSize="large" />
-                    )
-                )}
-            </Button> 
+                    {hovered && (
+                        <YouTubeIcon color="error" className="absolute bg-black" fontSize="large" />
+                    )}
+                </Button> 
 
-            <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
-                <div className="p-4 flex justify-center">
-                    <iframe
-                        className="w-full h-[400px] rounded-lg"
-                        src={embedUrl}
-                        title="Трейлер"
-                        allowFullScreen
-                    />
-                </div>
-            </Dialog>
-        </div>
+                <Dialog open={open} onClose={() => setOpen(false)} maxWidth="md" fullWidth>
+                    <div className="p-4 flex justify-center">
+                        <iframe
+                            className="w-full h-[400px] rounded-lg"
+                            src={youtubeUrl}
+                            title="Трейлер"
+                            allowFullScreen
+                        />
+                    </div>
+                </Dialog>
+            </div>) : (
+            <div className={`w-${width} h-${height} relative`}>
+                <Button
+                    className="!p-0 relative w-full h-full"
+                    onClick={handleOpenVideo}
+                    onMouseEnter={() => setHovered(true)}
+                    onMouseLeave={() => setHovered(false)}
+                >
+                    <div className="bg-black w-full h-full flex items-center justify-center">
+                        <TheatersIcon color="warning" className="absolute bg-black" />
+                    </div>                    
+                    {hovered && (
+                        <TheatersIcon color="warning" className="absolute bg-black" fontSize="large" />
+                    )}
+                </Button> 
+
+                <Dialog open={open} onClose={() => setOpen(false)} maxWidth="md" fullWidth>
+                    <div className="p-4 flex justify-center">
+                        <iframe
+                            className="w-full h-[400px] rounded-lg"
+                            src={youtubeUrl}
+                            title="Трейлер"
+                            allowFullScreen
+                        />
+                    </div>
+                </Dialog>
+            </div>
+        )
+        
     );
 };
 

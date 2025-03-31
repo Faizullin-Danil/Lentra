@@ -62,3 +62,9 @@ model persons {
   profession_text String?
   profession_key  String? @db.VarChar(50)
 }
+
+model images {
+  id              Int     @id @default(autoincrement())
+  kinopoisk_id    Int?
+  url             String? 
+}
