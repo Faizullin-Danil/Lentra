@@ -26,8 +26,8 @@ const TrailerComp: React.FC<TrailerCompProps> = ({ videoUrl }) => {
     const handleClose = () => {
         setOpen(false);  
     };
-
-    console.log(isYouTube)
+    console.log(embedUrl)
+    // console.log(isYouTube)
 
     return (
         <div className="w-50 h-30 relative">
