@@ -8,9 +8,10 @@ interface TrailerCompProps {
     site?: string,
     width?: string,
     height?: string
+    previewUrl?: string
 }
 
-const TrailerComp: React.FC<TrailerCompProps> = ({ videoUrl, width, height }) => {
+const TrailerComp: React.FC<TrailerCompProps> = ({ previewUrl, videoUrl, width, height }) => {
     const [open, setOpen] = useState(false);
     const [hovered, setHovered] = useState(false);
 
@@ -26,14 +27,18 @@ const TrailerComp: React.FC<TrailerCompProps> = ({ videoUrl, width, height }) =>
     };
 
     return (
-        isYoutube ? (<div className={`w-${width} h-${height} relative`}>
+        isYoutube ? (<div style={{ width: `${width}px`, height: `${height}px` }} className="relative">
                 <Button
                     className="!p-0 relative w-full h-full"
                     onClick={() => setOpen(true)}
                     onMouseEnter={() => setHovered(true)}
                     onMouseLeave={() => setHovered(false)}
                 >
-                    <div className="bg-black w-full h-full flex items-center justify-center">
+                    <div className="w-full h-full flex items-center justify-center">
+                        <img
+                            src={previewUrl}
+                            className="w-full h-full object-cover rounded-lg"
+                        />
                         <YouTubeIcon color="error" className="absolute bg-black" />
                     </div>                    
                     {hovered && (
@@ -52,16 +57,20 @@ const TrailerComp: React.FC<TrailerCompProps> = ({ videoUrl, width, height }) =>
                     </div>
                 </Dialog>
             </div>) : (
-            <div className={`w-${width} h-${height} relative`}>
+            <div style={{ width: `${width}px`, height: `${height}px` }} className="relative">
                 <Button
                     className="!p-0 relative w-full h-full"
                     onClick={handleOpenVideo}
                     onMouseEnter={() => setHovered(true)}
                     onMouseLeave={() => setHovered(false)}
                 >
-                    <div className="bg-black w-full h-full flex items-center justify-center">
-                        <TheatersIcon color="warning" className="absolute bg-black" />
-                    </div>                    
+                    <div className="w-full h-full flex items-center justify-center">
+                        <img
+                            src={previewUrl}
+                            className="w-full h-full object-cover rounded-lg"
+                        />
+                        <TheatersIcon color="error" className="absolute bg-black" />
+                    </div>                   
                     {hovered && (
                         <TheatersIcon color="warning" className="absolute bg-black" fontSize="large" />
                     )}

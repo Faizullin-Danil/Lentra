@@ -37,9 +37,10 @@ function a11yProps(index: number) {
 interface TabsPanelProps {
   description: string | null
   videos: [] | null
+  images: string[]
 }
 
-const TabsPanel: React.FC<TabsPanelProps> = ({description, videos}) => {
+const TabsPanel: React.FC<TabsPanelProps> = ({description, videos, images}) => {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -52,7 +53,7 @@ const TabsPanel: React.FC<TabsPanelProps> = ({description, videos}) => {
         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
           <Tab label="Описание" {...a11yProps(0)} />
           <Tab label="Видео" {...a11yProps(1)} />
-          <Tab label="Item Three" {...a11yProps(2)} />
+          <Tab label="Изображения" {...a11yProps(2)} />
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
@@ -67,16 +68,25 @@ const TabsPanel: React.FC<TabsPanelProps> = ({description, videos}) => {
           
           {videos.length > 0 
             ? (videos?.map((video, index) => (
-                <TrailerComp key={index} videoUrl={video.url} site={video.site} width='50' height='30'/>
+                <TrailerComp key={index} videoUrl={video.url} site={video.site} width='150' height='100'/>
               ))
             ) : (
-              <div>Нет видео</div>
+              <h1>Нет видео</h1>
             )}
             
         </div>
       </CustomTabPanel>
       <CustomTabPanel value={value} index={2}>
-        Item Three
+          {images.length > 0 ? ( 
+            <div className='flex flex-wrap gap-1 justify-center'>
+              {images.map((image, index) => (
+                <img key={index} src={image.url} width="30%" height="auto" />
+              ))}
+            </div>
+            
+          ) : (
+            <h1>Нет изображений</h1>
+          )}
       </CustomTabPanel>
     </Box>
   );

@@ -9,16 +9,28 @@ import { deleteFavouriteFilm as deleteFavouriteFilmFromAPI, addFavouriteFilm as 
 import TabsPanel from "../../components/TabsPanel/TabsPanel";
 import { Link } from 'react-router-dom';
 import TrailerComp from "../../components/TrailerComp/TrailerComp"
+import { getImages } from "../../services/apiService"; 
 
 
 const FilmPage = () => {
     const location = useLocation();
     const { film } = location.state || {}; 
+    const [images, setImages] = useState([])
     const favouritesFilms = useSelector((state: RootState) => state.favouritesFilms.value)
     const [isFavourite, setIsFavourite] = useState(favouritesFilms.some(favFilm => favFilm.kinopoisk_id === film.kinopoisk_id))
     const dispatch = useDispatch()
 
     useEffect(() => {
+        const loadImages = async () => {
+            try {
+                const imagesFromDB = await getImages(film.kinopoisk_id)
+                setImages(imagesFromDB)
+            } catch (error) {
+                console.error("Ошибка загрузки изображения:", error);
+            }
+        }
+        loadImages()
+
         setIsFavourite(favouritesFilms.some(favFilm => favFilm.kinopoisk_id === film.kinopoisk_id))
     }, [favouritesFilms, film.id])
 
@@ -35,6 +47,8 @@ const FilmPage = () => {
     }
 
     console.log(film)
+    console.log("images: ", images)
+
 
     return (
         <div className="mt-[50px] flex flex-col items-center">
@@ -43,7 +57,13 @@ const FilmPage = () => {
                     <img src={film.poster_url} className="w-80 h-120 object-cover" />
                     {film.videos.length > 0 ? (
                         <div>
-                            <TrailerComp videoUrl={film.videos[0].url} site={film.videos[0].site} height="50"/>
+                            <TrailerComp 
+                                previewUrl={images.length > 0 ? images[0].url : "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/3022bd7b-1c96-41bc-abd3-427989ffb56a/dgqtbo2-11e038d5-928c-4bac-a03e-7ef4f5570ed6.gif/v1/fill/w_1095,h_730,q_85,strp/little_animation_of_rimuru_by_cartoonnikola_dgqtbo2-pre.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9MTAwMCIsInBhdGgiOiJcL2ZcLzMwMjJiZDdiLTFjOTYtNDFiYy1hYmQzLTQyNzk4OWZmYjU2YVwvZGdxdGJvMi0xMWUwMzhkNS05MjhjLTRiYWMtYTAzZS03ZWY0ZjU1NzBlZDYuZ2lmIiwid2lkdGgiOiI8PTE1MDAifV1dLCJhdWQiOlsidXJuOnNlcnZpY2U6aW1hZ2Uub3BlcmF0aW9ucyJdfQ.Zw0wX0joQIZq_ljmBKCr_IjS29gEloKlhReifrYaf1w" }
+                                videoUrl={film.videos[0].url}
+                                site={film.videos[0].site}
+                                width="300"
+                                height="200"
+                            />
                             <h1 className="text-l">Трейлер</h1>
                         </div>
                     ) : (
@@ -125,7 +145,7 @@ const FilmPage = () => {
             </div>
 
             <div className="w-[80%] mt-10">
-                <TabsPanel description={film.description} videos={film.videos} />
+                <TabsPanel images={images} description={film.description} videos={film.videos} />
             </div>
             
         </div>

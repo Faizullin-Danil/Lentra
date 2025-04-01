@@ -82,3 +82,13 @@ export const addFavouriteFilm = async (kinopoisk_id: number) => {
     throw error
   }
 }
+
+export const getImages = async (kinopoisk_id: string) => {
+  try {
+    const response = await axios.get(`http://localhost:3000/api/images/${kinopoisk_id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Ошибка при получении images:", error);
+    throw error;
+  }
+};
