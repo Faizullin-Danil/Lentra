@@ -92,3 +92,14 @@ export const getImages = async (kinopoisk_id: string) => {
     throw error;
   }
 };
+
+export const getSimilarMovies = async (kinopoisk_id: string) => {
+  try {
+    const response = await axios.get(`http://localhost:3000/api/similarmovies/${kinopoisk_id}`);
+    // console.log("dada", response)
+    return response.data;
+  } catch (error) {
+    console.error("Ошибка при получении images:", error);
+    throw error;
+  }
+};

@@ -60,15 +60,17 @@ const TabsPanel: React.FC<TabsPanelProps> = ({description, videos, images}) => {
         {description !== null ? (
             <h1>{description}</h1>
           ) : (
-            <div>нет описания</div>
+            <div>Нет описания</div>
           )}
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
         <div className='flex gap-2'>
-          
           {videos.length > 0 
             ? (videos?.map((video, index) => (
-                <TrailerComp key={index} videoUrl={video.url} site={video.site} width='150' height='100'/>
+              <div>
+                <TrailerComp key={index} videoUrl={video.url} nameVideo={video.name} width='150' height='100'/>
+                <h1 className='text-xs'>{video.name}</h1>
+              </div>
               ))
             ) : (
               <h1>Нет видео</h1>

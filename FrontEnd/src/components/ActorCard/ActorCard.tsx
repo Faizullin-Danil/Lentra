@@ -15,14 +15,14 @@ const ActorCard: React.FC<ActorCardProps> = ({ name_ru, poster_url }) => {
         <Card className="w-60 h-82 flex flex-col justify-between">
             <CardActionArea>
                 <CardMedia
-                component="img"
-                className="h-64 object-cover"
-                image={poster_url}
-                alt={name_ru}
+                  component="img"
+                  className="h-64 object-cover"
+                  image={poster_url}
+                  alt={name_ru}
                 />
                 <CardContent className="text-center h-12">
                 <Typography variant="h6" className="text-base">
-                    {name_ru}
+                  {name_ru}
                 </Typography>
                 </CardContent>
             </CardActionArea>

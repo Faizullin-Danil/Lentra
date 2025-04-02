@@ -27,7 +27,7 @@ const TrailerComp: React.FC<TrailerCompProps> = ({ previewUrl, videoUrl, width, 
     };
 
     return (
-        isYoutube ? (<div style={{ width: `${width}px`, height: `${height}px` }} className="relative">
+        isYoutube ? (<div style={{ width: `${width}px`, height: `${height}px` }} className="relative bg-black">
                 <Button
                     className="!p-0 relative w-full h-full"
                     onClick={() => setOpen(true)}
@@ -37,7 +37,7 @@ const TrailerComp: React.FC<TrailerCompProps> = ({ previewUrl, videoUrl, width, 
                     <div className="w-full h-full flex items-center justify-center">
                         <img
                             src={previewUrl}
-                            className="w-full h-full object-cover rounded-lg"
+                            className="w-full h-full object-cover"
                         />
                         <YouTubeIcon color="error" className="absolute bg-black" />
                     </div>                    
@@ -57,7 +57,7 @@ const TrailerComp: React.FC<TrailerCompProps> = ({ previewUrl, videoUrl, width, 
                     </div>
                 </Dialog>
             </div>) : (
-            <div style={{ width: `${width}px`, height: `${height}px` }} className="relative">
+            <div style={{ width: `${width}px`, height: `${height}px` }} className="relative bg-black">
                 <Button
                     className="!p-0 relative w-full h-full"
                     onClick={handleOpenVideo}
@@ -67,15 +67,14 @@ const TrailerComp: React.FC<TrailerCompProps> = ({ previewUrl, videoUrl, width, 
                     <div className="w-full h-full flex items-center justify-center">
                         <img
                             src={previewUrl}
-                            className="w-full h-full object-cover rounded-lg"
+                            className="w-full h-full object-cover "
                         />
-                        <TheatersIcon color="error" className="absolute bg-black" />
+                        <TheatersIcon color="warning" className="absolute bg-black" />
                     </div>                   
                     {hovered && (
                         <TheatersIcon color="warning" className="absolute bg-black" fontSize="large" />
                     )}
                 </Button> 
-
                 <Dialog open={open} onClose={() => setOpen(false)} maxWidth="md" fullWidth>
                     <div className="p-4 flex justify-center">
                         <iframe

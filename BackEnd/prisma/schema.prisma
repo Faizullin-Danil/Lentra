@@ -26,13 +26,13 @@ model favouritesmovies {
   movie_length       Int?
   description        String?
   rating_age_limits  String?
-  videos             Json?
+  videos             Json?      
 }
 
 model movies {
-  id                 Int      @id @default(autoincrement())
-  imdb_id            String?  @unique @db.VarChar(20)
-  kinopoisk_id       Int?     @unique
+  id                 Int               @id @default(autoincrement())
+  imdb_id            String?           @unique @db.VarChar(20)
+  kinopoisk_id       Int?              @unique
   name_en            String?
   name_original      String?
   name_ru            String?
@@ -41,14 +41,26 @@ model movies {
   persons            Json?
   poster_url         String?
   poster_url_preview String?
-  rating_imdb        Decimal? @db.Decimal(3, 1)
-  rating_kinopoisk   Decimal? @db.Decimal(3, 1)
-  type               String?  @db.VarChar(10)
+  rating_imdb        Decimal?          @db.Decimal(3, 1)
+  rating_kinopoisk   Decimal?          @db.Decimal(3, 1)
+  type               String?           @db.VarChar(10)
   year               Int?
   movie_length       Int?
   description        String?
   rating_age_limits  String?
   videos             Json?
+}
+
+model similarmovies {
+  id                   Int     @id @default(autoincrement())
+  film_id               Int         
+  name_ru               String?
+  name_en               String?
+  name_original         String?
+  poster_url            String?
+  poster_url_preview     String?
+  relation_type         String?
+  kinopoisk_id         Int
 }
 
 model persons {
