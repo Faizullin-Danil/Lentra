@@ -29,7 +29,7 @@ const ListFilms: React.FC<ListFilmProps> = ({ films }) => {
               .map((person) => person.name_ru)
               .join(", ")
           }
-          rating={film.ratingKinopoisk}
+          rating={film.rating_kinopoisk}
           movieLength={film.movie_length}
           producer={
             film.persons

@@ -21,6 +21,7 @@ const FilmPage = () => {
     const dispatch = useDispatch();
 
     console.log(film)
+    console.log(images)
 
     useEffect(() => {
         const loadImages = async () => {
@@ -45,8 +46,6 @@ const FilmPage = () => {
 
         setIsFavourite(favouritesFilms.some(favFilm => favFilm.kinopoisk_id === film.kinopoisk_id));
     }, []);
-
-    console.log("dada", similarMovies)
 
     const handleToggleFavourite = () => {
         if (isFavourite) {
@@ -120,7 +119,7 @@ const FilmPage = () => {
                             <h1 key={p.staff_id} className="text-sm">{p.name_ru || p.name_en}</h1>
                         ))}
                     </div>
-                    <Link to={`/actorsByfilm/${film.kinopoisk_id}`} state={{film}}>
+                    <Link to={`/actorsbyfilm/${film.kinopoisk_id}`} state={{film}}>
                         <button className="text-[12px] text-blue-600 hover:cursor-pointer hover:underline">
                             {film.persons.filter(p => p.profession_text === "Актеры").length} актер(-ов)
                         </button>
@@ -131,14 +130,13 @@ const FilmPage = () => {
             <div className="w-[80%] mt-10">
                 <TabsPanel images={images} description={film.description} videos={film.videos} />
             </div>
-
+            <h1 className="text-xl text-left">Похожие фильмы</h1>
             <div className="w-[80%] flex flex-row">
                 <Box className={`flex gap-2 overflow-x-auto whitespace-nowrap p-2 w-full ${similarMovies.length < 10 ? 'justify-center' : ''}`}>
                     {similarMovies.map((movie, index) => (
                         <SimilarMovieCard key={index} name={movie?.name_ru} posterUrl={movie?.poster_url}/>
                     ))}
                 </Box>
-                
             </div>
 
         </div>

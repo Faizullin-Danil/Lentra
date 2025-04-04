@@ -39,10 +39,10 @@ const TrailerComp: React.FC<TrailerCompProps> = ({ previewUrl, videoUrl, width, 
                             src={previewUrl}
                             className="w-full h-full object-cover"
                         />
-                        <YouTubeIcon color="error" className="absolute bg-black" />
+                        <YouTubeIcon color="error" className="absolute " />
                     </div>                    
                     {hovered && (
-                        <YouTubeIcon color="error" className="absolute bg-black" fontSize="large" />
+                        <YouTubeIcon color="error" className="absolute" fontSize="large" />
                     )}
                 </Button> 
 
@@ -69,7 +69,7 @@ const TrailerComp: React.FC<TrailerCompProps> = ({ previewUrl, videoUrl, width, 
                             src={previewUrl}
                             className="w-full h-full object-cover "
                         />
-                        <TheatersIcon color="warning" className="absolute bg-black" />
+                        <TheatersIcon color="warning" className="absolute bg-black " />
                     </div>                   
                     {hovered && (
                         <TheatersIcon color="warning" className="absolute bg-black" fontSize="large" />

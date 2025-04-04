@@ -1,4 +1,3 @@
-import "./MainPage.css";
 import ListFilms from "../../components/ListFilms/ListFilms";
 import Filter from "../../components/Filter/Filter";
 import { useDispatch, useSelector } from "react-redux";
@@ -10,7 +9,7 @@ import { setClearFilter } from "../../store/FilmsSlice";
 import { fetchFilms, fetchFavouritesFilms } from "../../services/apiService"; 
 import { CircularProgress } from '@mui/material';
 
-const MainPage = () => {
+const FilmsPage = () => {
   const films = useSelector((state: RootState) => state.films.value);
   const favouritesFilms = useSelector((state: RootState) => state.favouritesFilms.value);
   const openAlert = useSelector((state: RootState) => state.alert.value);
@@ -59,8 +58,8 @@ const MainPage = () => {
   return (
     <div className="flex justify-center">
       {isLoading ? (
-        <div className="flex items-center justify-center h-[80vh] w-full">
-          <CircularProgress />
+        <div className="flex items-center justify-center h-[80vh] w-full ">
+          <CircularProgress className="!text-black"/>
         </div>
       ) : (
         <div className="w-[80%] flex flex-col items-center ml-40">
@@ -81,4 +80,4 @@ const MainPage = () => {
   );
 };
 
-export default MainPage;
+export default FilmsPage;

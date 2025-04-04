@@ -1,5 +1,3 @@
-import React, { useState, useEffect } from 'react';
-import "./FilmCard.css"
 import { FaRegStar } from "react-icons/fa";
 import { FaStar } from "react-icons/fa";
 import { useDispatch, useSelector } from 'react-redux';
@@ -45,11 +43,11 @@ const FilmCard: React.FC<FilmProps> = ({film, id, name, countries, year, genres,
 
   return (
     <div>
-      <div className='m-2 p-5 flex flex-row gap-10 transition duration-300 hover:bg-gray-100 hover:rounded-4xl'>
-        <Link to={`/film/${id}`} state={{film}} className='flex gap-5 w-[70%]'>
+      <div className='m-2 p-5 flex flex-row gap-10 duration-300 hover:bg-gray-100 hover:rounded-4xl'>
+        <Link to={`/film/${id}`} state={{film}} className='flex gap-5 w-[100%]'>
           <img src={poster} className='w-20 h-32' />
-          <div className='cursor-pointer'>
-            <h1 className='text-xl font-bold'>{name}</h1>
+          <div className="w-[60%]">
+            <h1 className='text-xl font-bold'>{name || enName}</h1>
             <h1 className='text-l font-semibold'>
               {enName ? `${enName}, ` : ""}{year}{movieLength !== null ? `, ${formattedMovieLength}` : ""}
             </h1>
@@ -58,12 +56,13 @@ const FilmCard: React.FC<FilmProps> = ({film, id, name, countries, year, genres,
             {producer.length > 0 ? <h1 className='font-normal text-gray-400'>Продюсер: {producer}</h1> : <h1 className='font-normal text-gray-400'>Продюсер: не указано</h1>}
             {actors.length > 0 ? <h1 className='font-normal text-gray-400'>В ролях: {actors}</h1> : <h1 className='font-normal text-gray-400'>В ролях: не указано</h1>}
           </div>
+          <h2 className=' justify-center items-center flex flex-1 !text-black'>{rating}</h2>
+
         </Link>
 
-        <h2 className='cursor-default justify-center items-center flex flex-1 text-[#FFD700]'>{rating}</h2>
         <div>
           {isFavourite
-            ? <FaStar className="cursor-pointer bg-gray-200 rounded-4xl text-3xl p-2 transition duration-300 hover:bg-gray-300" onClick={handleToggleFavourite} />
+            ? <FaStar className="cursor-pointer bg-gray-200 rounded-4xl text-3xl p-2 transition duration-300 hover:bg-gray-300 " onClick={handleToggleFavourite} />
             : <FaRegStar className='cursor-pointer bg-gray-200 rounded-4xl text-3xl p-2 transition duration-300 hover:bg-gray-300' onClick={handleToggleFavourite} />
           }
         </div>

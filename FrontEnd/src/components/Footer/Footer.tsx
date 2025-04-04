@@ -1,9 +1,8 @@
-import React from 'react';
 import "./Footer.css"
 
 const Footer = () => {
   return (
-    <div className='Footer'>
+    <div className='Footer text-white'>
       информация
     </div>
   );

@@ -69,7 +69,7 @@ const DropDownMenu: React.FC<DropDownMenuProps> = ({
         isCountryExist = allFavouritesFilms.some(film =>
           film.countries.some(country => country.country === value)
         );
-         console.log(isCountryExist)
+        console.log(isCountryExist)
         if (isCountryExist) {
           dispatch(setFavouriteCountry(value));
         } else {
@@ -97,7 +97,25 @@ const DropDownMenu: React.FC<DropDownMenuProps> = ({
       options={buttons}
       value={title}
       onChange={handleFilter}
-      renderInput={(params) => <TextField {...params} label={type || "Выберите"} />}
+      renderInput={(params) => (
+        <TextField 
+          {...params} 
+          label={type || "Выберите"} 
+          sx={{
+            '& .MuiOutlinedInput-root': {
+              '& fieldset': {
+                borderColor: 'black',
+              },
+              '&:hover fieldset': {
+                borderColor: 'black', 
+              },
+              '&.Mui-focused fieldset': {
+                borderColor: 'black', 
+              },
+            },
+          }} 
+        />
+      )}
     />
   );
 };

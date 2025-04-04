@@ -5,7 +5,7 @@ import Button from "@mui/material/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { setClearFilter, setYears } from "../../store/FilmsSlice";
 import { setFavouriteClearFilter, setFavouriteYears } from "../../store/FavouriteFilmsSlice";
-import { openAlertWithTimeout } from "../../store/AlertSlice"
+import { openAlertWithTimeout } from "../../store/AlertSlice";
 import { RootState } from "@/store/store";
 
 interface FilterProps {
@@ -15,13 +15,16 @@ interface FilterProps {
 const Filter: React.FC<FilterProps> = ({ whichPage }) => {
   const [countryTitle, setCountryTitle] = useState<string>("Все страны");
   const [genreTitle, setGenreTitle] = useState<string>("Все жанры");
-  const [valueFrom, setValueFrom] = useState<string>("");
-  const [valueTo, setValueTo] = useState<string>("");
+  const [valueFrom, setValueFrom] = useState<string>(""); 
+  const [valueTo, setValueTo] = useState<string>(""); 
   const [errorFrom, setErrorFrom] = useState<boolean>(false);
   const [errorTo, setErrorTo] = useState<boolean>(false);
   const dispatch = useDispatch();
   const allFavouritesFilms = useSelector((state: RootState) => state.favouritesFilms.allFavouritesFilms);
   const allFilms = useSelector((state: RootState) => state.films.allFilms);
+  
+  console.log("ошибка:", errorFrom)
+
 
   const onChangeFrom = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value.replace(/\D/g, "");
@@ -51,8 +54,8 @@ const Filter: React.FC<FilterProps> = ({ whichPage }) => {
       hasError = true;
     }
 
-    const isFilmsYears = allFilms.filter(film => (film.year >= valueFrom) && (film.year <= valueTo))
-    const isFavouritesFilmsYears = allFavouritesFilms.filter(film => (film.year >= valueFrom) && (film.year <= valueTo))
+    const isFilmsYears = allFilms.filter(film => (film.year >= valueFrom) && (film.year <= valueTo));
+    const isFavouritesFilmsYears = allFavouritesFilms.filter(film => (film.year >= valueFrom) && (film.year <= valueTo));
     
     if (!hasError) {
       setCountryTitle("Все страны");
@@ -63,11 +66,10 @@ const Filter: React.FC<FilterProps> = ({ whichPage }) => {
       } else if (whichPage === "Страница избранных" && isFavouritesFilmsYears.length !== 0) {
         dispatch(setFavouriteYears(YearsFromAndTo));
       } else {
-        dispatch(openAlertWithTimeout())
+        dispatch(openAlertWithTimeout());
       }
     }
   };
-
 
   const clearFilter = () => {
     setValueFrom("");
@@ -119,7 +121,20 @@ const Filter: React.FC<FilterProps> = ({ whichPage }) => {
             onChange={onChangeFrom}
             placeholder="от"
             size="small"
-            sx={{ "& input": { fontSize: "12px", padding: 1 }, "& .MuiInputBase-root": { padding: 0 } }}
+            sx={{
+              "& input": { fontSize: "12px", padding: 1 },
+              "& .MuiOutlinedInput-root": {
+                "&:hover fieldset": {
+                  borderColor: "black",
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: "black",
+                },
+                "&.Mui-error fieldset": {
+                  borderColor: "red",
+                },
+              },
+            }}
           />
           <TextField
             type="text"
@@ -128,14 +143,30 @@ const Filter: React.FC<FilterProps> = ({ whichPage }) => {
             onChange={onChangeTo}
             placeholder="до"
             size="small"
-            sx={{ "& input": { fontSize: "12px", padding: 1 }, "& .MuiInputBase-root": { padding: 0 } }}
+            variant="outlined"
+            sx={{
+              "& input": { fontSize: "12px", padding: 1 },
+              "& .MuiOutlinedInput-root": {
+                "&:hover fieldset": {
+                  borderColor: "black",
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: "black",
+                },
+                "&.Mui-error fieldset": {
+                  borderColor: "red",
+                },
+              },
+            }}
           />
         </div>
-        <Button className="w-full !text-black !pt-3" size="small" onClick={filterByYears}>
+        <Button className="w-full !text-black !pt-3 hover:!bg-gray-100" size="small" onClick={filterByYears}>
           Фильтр по годам
         </Button>
       </div>
-      <Button className="w-full !mt-2" onClick={clearFilter}>Очистить фильтры</Button>
+      <Button className="w-full !mt-2 !text-black hover:!bg-gray-100" onClick={clearFilter}>
+        Очистить фильтры
+      </Button>
     </div>
   );
 };
