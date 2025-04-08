@@ -2,26 +2,40 @@ import { RootState } from "@/store/store";
 import { Box, Button } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, Link, useParams } from "react-router-dom";
 import { addFavouriteFilm, deleteFavouriteFilm } from '../../store/FavouriteFilmsSlice';
 import { FaRegStar, FaStar } from "react-icons/fa";
-import { deleteFavouriteFilm as deleteFavouriteFilmFromAPI, addFavouriteFilm as addFavouriteFilmFormAPI, getImages, getSimilarMovies } from "../../services/apiService";
+import { deleteFavouriteFilm as deleteFavouriteFilmFromAPI, addFavouriteFilm as addFavouriteFilmFormAPI, getImages, getSimilarMovies, getSimilarMovieFromAPI } from "../../services/apiService";
 import TabsPanel from "../../components/TabsPanel/TabsPanel";
 import TrailerComp from "../../components/TrailerComp/TrailerComp";
 import SimilarMovieCard from "../../components/SimilarMovieCard/SimilarMovieCard";
 
 
 const FilmPage = () => {
+    const { kinopoisk_id } = useParams();  // Получаем ID фильма из URL
     const location = useLocation();
-    const { film } = location.state || {}; 
+    const [film, setFilm] = useState(location.state?.film || null);
     const favouritesFilms = useSelector((state: RootState) => state.favouritesFilms.value);
     const [isFavourite, setIsFavourite] = useState(favouritesFilms.some(favFilm => favFilm.kinopoisk_id === film.kinopoisk_id));
     const [images, setImages] = useState([]);
     const [similarMovies, setSimilarMovies] = useState([]);
     const dispatch = useDispatch();
 
-    console.log(film)
-    console.log(images)
+    console.log(kinopoisk_id)
+    
+    useEffect(() => {
+        console.log("hf,")
+        // Загружаем информацию о фильме по kinopoiskId, если film не передан через location.state
+        const loadFilmData = async () => {
+            if (!film && kinopoisk_id) {
+                // Сделать запрос к API для получения фильма по ID
+                // Здесь вы можете добавить свой запрос
+                const filmData = await getSimilarMovieFromAPI(kinopoisk_id);
+                setFilm(filmData);  // Устанавливаем состояние фильма
+            }
+        };
+        loadFilmData();
+    }, [kinopoisk_id]); 
 
     useEffect(() => {
         const loadImages = async () => {
@@ -47,6 +61,9 @@ const FilmPage = () => {
         setIsFavourite(favouritesFilms.some(favFilm => favFilm.kinopoisk_id === film.kinopoisk_id));
     }, []);
 
+    // console.log("фильм:", film)
+
+
     const handleToggleFavourite = () => {
         if (isFavourite) {
             dispatch(deleteFavouriteFilm(film.kinopoisk_id));
@@ -69,6 +86,17 @@ const FilmPage = () => {
         const persons = film.persons.filter(p => p.profession_text === profession).map(p => p.name_ru || p.name_en).join(", ");
         return renderInfo(label, persons);
     };
+
+    const pluralizeActors = (n: number) => {
+        if (n % 100 >= 11 && n % 100 <= 14) return 'актеров';
+        const lastDigit = n % 10;
+        if (lastDigit === 1) return 'актер';
+        if (lastDigit >= 2 && lastDigit <= 4) return 'актера';
+        return 'актеров';
+    };
+
+    const countActors = film.persons.filter(p => p.profession_text === "Актеры").length
+      
 
     return (
         <div className="mt-[50px] flex flex-col items-center">
@@ -115,13 +143,15 @@ const FilmPage = () => {
                     <h1 className="text-xl font-semibold">{film.rating_kinopoisk}</h1>
                     <h1 className="mt-10 font-bold">В главных ролях</h1>
                     <div className="mt-2 text-start space-y-2">
-                        {film.persons.filter(p => p.profession_text === "Актеры").slice(0, 9).map(p => (
-                            <h1 key={p.staff_id} className="text-sm">{p.name_ru || p.name_en}</h1>
+                        {film.persons.filter(actor => actor.profession_text === "Актеры").slice(0, 9).map(actor => (
+                            <Link to={`/actor/${actor.staff_id}`}>
+                                <h1 key={actor.staff_id} className="text-sm hover:text-blue-600">{actor.name_ru || actor.name_en}</h1>
+                            </Link>
                         ))}
                     </div>
                     <Link to={`/actorsbyfilm/${film.kinopoisk_id}`} state={{film}}>
                         <button className="text-[12px] text-blue-600 hover:cursor-pointer hover:underline">
-                            {film.persons.filter(p => p.profession_text === "Актеры").length} актер(-ов)
+                            {countActors} {pluralizeActors(countActors)}
                         </button>
                     </Link>
                 </div>
@@ -134,7 +164,7 @@ const FilmPage = () => {
             <div className="w-[80%] flex flex-row">
                 <Box className={`flex gap-2 overflow-x-auto whitespace-nowrap p-2 w-full ${similarMovies.length < 10 ? 'justify-center' : ''}`}>
                     {similarMovies.map((movie, index) => (
-                        <SimilarMovieCard key={index} name={movie?.name_ru} posterUrl={movie?.poster_url}/>
+                        <SimilarMovieCard kinopoiskId={movie?.film_id} key={index} name={movie?.name_ru} posterUrl={movie?.poster_url}/>
                     ))}
                 </Box>
             </div>

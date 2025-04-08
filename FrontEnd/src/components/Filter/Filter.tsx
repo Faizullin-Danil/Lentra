@@ -91,7 +91,7 @@ const Filter: React.FC<FilterProps> = ({ whichPage }) => {
           type="Страны"
           title={countryTitle}
           setTitle={setCountryTitle}
-          buttons={["Все страны", "Канада", "США", "Германия", "Болгария", "Австрия", "Венгрия", "Франция", "Россия", "СССР", "Корея Южная"]}
+          buttons={["Все страны", "Канада", "США", "Германия", "Болгария", "Австрия", "Венгрия", "Франция", "Россия", "СССР", "Корея Южная", "Великобритания"]}
           resetOtherFilter={() => setGenreTitle("Все жанры")}
           setValueFrom={setValueFrom}
           setValueTo={setValueTo}
@@ -104,7 +104,7 @@ const Filter: React.FC<FilterProps> = ({ whichPage }) => {
           title={genreTitle}
           type="Жанры"
           setTitle={setGenreTitle}
-          buttons={["Все жанры", "драма", "мелодрама", "мюзикл", "комедия", "боевик", "фэнтези", "фантастика", "триллер", "ужасы"]}
+          buttons={["Все жанры", "драма", "мелодрама", "мюзикл", "комедия", "боевик", "фэнтези", "фантастика", "триллер", "ужасы", "приключения", "мульфильм", "детский", "музыка", "документальный", "семейный", "короткометражка", "биография", "криминал"]}
           resetOtherFilter={() => setCountryTitle("Все страны")}
           setValueFrom={setValueFrom}
           setValueTo={setValueTo}

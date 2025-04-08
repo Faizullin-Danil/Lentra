@@ -5,6 +5,7 @@ const personsRouter = require('./routes/personsRoutes')
 const videosRouter = require('./routes/videosRoutes')
 const imagesRouter = require('./routes/imagesRoutes')
 const similarMoviesRouter = require('./routes/similarMoviesRoutes')
+const actorsRouter = require('./routes/actorsRoutes')
 const cors = require('cors')
 
 const app = express();
@@ -20,6 +21,7 @@ app.use('/api/favouritesmovies', favouritesMoviesRouter);
 app.use('/api/videos', videosRouter); 
 app.use('/api/images', imagesRouter); 
 app.use('/api/similarmovies', similarMoviesRouter); 
+app.use('/api/actor', actorsRouter);  
 
 
 app.listen(PORT, () => console.log(`Сервер запущен на порте ${PORT}`));

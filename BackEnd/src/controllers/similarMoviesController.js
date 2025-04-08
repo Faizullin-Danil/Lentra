@@ -10,6 +10,17 @@ exports.getSimilarMoviesByMovieFromAPI = async (req, res) => {
     }
 };
 
+exports.getSimilarMovieFromAPI = async (req, res) => {
+    try {
+        const kinopoisk_id = parseInt(req.params.kinopoisk_id);
+        similarMovie = await similarMoviesService.getSimilarMovieFromAPI(kinopoisk_id);
+        
+        res.json(similarMovie)
+    } catch (error) {
+        console.log("ошибка в контроллере похожих в getSimilarMovies: ", error)
+    }
+}
+
 exports.getSimilarMovies = async (req, res) => {
     try {
         const kinopoisk_id = parseInt(req.params.kinopoisk_id);
@@ -19,3 +30,7 @@ exports.getSimilarMovies = async (req, res) => {
         console.log("ошибка в контроллере похожих в getSimilarMovies: ", error)
     }
 }
+
+
+
+

@@ -19,7 +19,6 @@ exports.getSimilarMoviesByMovieFromAPI = async () => {
                                 'X-API-KEY': API_KEY,
                             }
                 });
-                // console.log(response.data.items)
 
                 await similarMoviesRepository.addSimilarMoviesInDB(kinopoiskId, response.data.items)
             } catch (error) {
@@ -31,6 +30,19 @@ exports.getSimilarMoviesByMovieFromAPI = async () => {
 
     } catch (error) {
         console.log("Ошибка в сервисе similar в getSimilarMoviesByMovieFromAPI", error)
+    }
+};
+
+exports.getSimilarMovieFromAPI = async (kinopoisk_id) => {
+    try {
+        const response = await axios.get(`https://kinopoiskapiunofficial.tech/api/v2.2/films/${kinopoisk_id}`, {
+            headers: {
+                'X-API-KEY': API_KEY
+            }
+        });
+        return response.data
+    } catch (error) {
+        console.log("Ошибка в сервисе similarMovies в getSimilarMovies", error)
     }
 };
 

@@ -65,7 +65,6 @@ export const fetchPersons = async (kinopoisk_id: number) => {
 };
 
 export const deleteFavouriteFilm = async (kinopoisk_id: number) => {
-  console.log(typeof kinopoisk_id)
   try {
     await axios.delete(`http://localhost:3000/api/favouritesmovies/${kinopoisk_id}`)
   } catch (error) {
@@ -96,10 +95,30 @@ export const getImages = async (kinopoisk_id: string) => {
 export const getSimilarMovies = async (kinopoisk_id: string) => {
   try {
     const response = await axios.get(`http://localhost:3000/api/similarmovies/${kinopoisk_id}`);
-    // console.log("dada", response)
     return response.data;
   } catch (error) {
     console.error("Ошибка при получении images:", error);
     throw error;
   }
 };
+
+export const getSimilarMovieFromAPI = async (kinopoisk_id: string) => {
+  try {
+    const response = await axios.get(`http://localhost:3000/api/similarmovies/fetch-similarmovie/${kinopoisk_id}`);
+    console.log("ответ",response.data)
+    return response.data;
+  } catch (error) {
+    console.error("Ошибка при получении images:", error);
+    throw error;
+  }
+};
+
+export const getActor = async(actor_id: string) => {
+  try {
+    const response = await axios.get(`http://localhost:3000/api/actor/${actor_id}`);
+    return response.data.actor
+  } catch (error) {
+    console.error("Ошибка при получении данных актера:", error);
+    throw error;
+  }
+} 

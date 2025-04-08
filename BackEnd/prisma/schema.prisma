@@ -80,3 +80,19 @@ model images {
   kinopoisk_id    Int?
   url             String? 
 }
+
+model actors {
+  id             Int         @id @default(autoincrement())
+  personId       Int         @unique
+  nameRu         String?
+  nameEn         String?
+  sex            String?
+  posterUrl      String?
+  growth         Int?
+  birthday       DateTime?
+  age            Int?
+  birthplace     String?
+  hasAwards      Int?
+  profession     String?
+  facts          Json?       
+}

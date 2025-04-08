@@ -2,7 +2,8 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
 exports.saveMovie = async (movieData) => {
-    const { imdbId, kinopoiskId, nameRu, nameOriginal, nameEn, countries, genres, posterUrl, posterUrlPreview, ratingImdb, ratingKinopoisk, type, year, filmLength, description, ratingAgeLimits } = movieData;
+    const { imdbId, kinopoiskId, nameRu, nameOriginal, nameEn, countries, genres, posterUrl, posterUrlPreview, ratingImdb, ratingKinopoisk, 
+            type, year, filmLength, description, ratingAgeLimits } = movieData;
 
     try {
         await prisma.movies.upsert({

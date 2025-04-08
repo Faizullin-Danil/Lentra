@@ -12,7 +12,7 @@ exports.getPersonsByMovieFromAPI = async (req, res) => {
 
 exports.getPersonsByKinopoiskId = async (req, res) => {
     try {
-        const { kinopoisk_id } = req.params;
+        const kinopoisk_id = parseInt(req.params.kinopoisk_id);
         const persons = await personService.getPersonsByKinopoiskId(kinopoisk_id);
         res.json(persons);
     } catch (error) {
