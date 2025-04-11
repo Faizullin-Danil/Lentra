@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { Film as FavouriteFilm } from "@/interfaces/Ifilm";
+import { Film as FavouriteFilm } from "../interfaces/IFilm";
 
 
 export const FavouritesFilmsSlice = createSlice({
@@ -24,18 +24,21 @@ export const FavouritesFilmsSlice = createSlice({
         },
         setFavouriteCountry: (state, action) => {
             state.value = state.allFavouritesFilms.filter(film => 
-                film.countries.some(country => 
-                    country.country.includes(action.payload) || action.payload.includes(country.name)
+                film.countries?.some(country => 
+                    country.country.includes(action.payload) || action.payload.includes(country.country)
                 )
             );
         },
         setFavouriteGenres: (state, action) => {
             state.value = state.allFavouritesFilms.filter(film => 
-                film.genres.some(genre => genre.genre === action.payload)
+                film.genres?.some(genre => genre.genre === action.payload)
             );
         },
         setFavouriteYears: (state, action) => {
-            state.value = state.allFavouritesFilms.filter(film => (film.year >= action.payload.from) && (film.year <= action.payload.to)
+            state.value = state.allFavouritesFilms.filter(film =>
+                (film.year != null) && // Проверка на null или undefined
+                (film.year >= action.payload.from) &&
+                (film.year <= action.payload.to)
             );
         },
         setFavouriteClearFilter: (state) => {

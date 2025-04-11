@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { Film } from "@/interfaces/Ifilm";
+import { Film } from "../interfaces/IFilm";
 
 export const FilmsSlice = createSlice({
     name: 'films',
@@ -14,14 +14,14 @@ export const FilmsSlice = createSlice({
         },
         setCountry: (state, action) => {
             state.value = state.allFilms.filter(film => 
-                film.countries.some(country => 
-                    country.country.includes(action.payload) || action.payload.includes(country.name)
+                film.countries?.some(country => 
+                    country.country.includes(action.payload) || action.payload.includes(country.country)
                 )
             );
         },        
         setGenres: (state, action) => {
             state.value = state.allFilms.filter(film => 
-                film.genres.some(genre => genre.genre === action.payload)
+                film.genres?.some(genre => genre.genre === action.payload)
             );
         },
         setYears: (state, action) => {

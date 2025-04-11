@@ -2,30 +2,27 @@ import ListFilms from "../../components/ListFilms/ListFilms";
 import Filter from "../../components/Filter/Filter";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
-import { useEffect, useState } from "react";
-import Alert from '@mui/material/Alert';
-import Stack from '@mui/material/Stack';
+import { useEffect } from "react";
+// import Alert from '@mui/material/Alert';
+// import Stack from '@mui/material/Stack';
 import { setClearFilter } from "../../store/FilmsSlice";
-import { fetchFilms, fetchFavouritesFilms } from "../../services/apiService"; 
-import { CircularProgress } from '@mui/material';
+import { fetchFavouritesFilms, fetchFilms } from "../../services/apiService"; 
+import { Box } from "@mui/material";
 
 const FilmsPage = () => {
   const films = useSelector((state: RootState) => state.films.value);
-  const favouritesFilms = useSelector((state: RootState) => state.favouritesFilms.value);
-  const openAlert = useSelector((state: RootState) => state.alert.value);
-  const [ isLoading, setIsLoading ] = useState(false);
+  const favouritesFilms = useSelector((state: RootState) => state.favouritesFilms.value)
+  // const openAlert = useSelector((state: RootState) => state.alert.value);
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (films.length === 0) {  
       const loadFilms = async () => {
-        setIsLoading(true);
         try {
           await fetchFilms(dispatch);
         } catch (error) {
           console.error("Ошибка загрузки фильмов:", error);
         } finally {
-          setIsLoading(false);
         }
       };
   
@@ -34,14 +31,11 @@ const FilmsPage = () => {
 
     if (favouritesFilms.length === 0) {  
       const loadFilms = async () => {
-        setIsLoading(true);
-        try {
+      try {
           await fetchFavouritesFilms(dispatch);
-        } catch (error) {
+      } catch (error) {
           console.error("Ошибка загрузки избранных фильмов:", error);
-        } finally {
-          setIsLoading(false);
-        }
+      }
       };
   
       loadFilms();
@@ -49,25 +43,20 @@ const FilmsPage = () => {
   
     return () => {
       dispatch(setClearFilter());
+      console.log("вышел")
     };
-  }, [dispatch]); 
+  }, []); 
   
 
   console.log("фильмы", films);
 
   return (
-    <div className="flex justify-center">
-      {isLoading ? (
-        <div className="flex items-center justify-center h-[80vh] w-full ">
-          <CircularProgress className="!text-black"/>
-        </div>
-      ) : (
-        <div className="w-[80%] flex flex-col items-center ml-40">
+    <Box className="flex justify-center">
+        <Box className="w-[80%] flex flex-col items-center ml-40">
           <Filter whichPage="Главная страница" />
           <ListFilms films={films} />
-        </div>
-      )}
-      {openAlert && (
+        </Box>
+      {/* {openAlert && (
         <div className="fixed bottom-5">
           <Stack sx={{ width: "100%" }} spacing={2}>
             <Alert variant="filled" severity="error">
@@ -75,8 +64,8 @@ const FilmsPage = () => {
             </Alert>
           </Stack>
         </div>
-      )}
-    </div>
+      )} */}
+    </Box>
   );
 };
 

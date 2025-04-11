@@ -1,12 +1,25 @@
+import { Person } from "./IPerson"
+import { Video } from "./IVideo"
+
 export interface Film {
-  kinopoiskId: number | null | undefined;
-  nameRu: string | null | undefined;
-  countries: Array<{ name: string }> | null | undefined;
-  genres: Array<{ name: string }> | null | undefined;
-  year: number | null | undefined;
-  nameOriginal: string | null | undefined;
-  movieLength: number | null | undefined;
-  persons: Array<{ id: number; name: string; profession: string }> | null | undefined;
-  posterUrl: { url: string; previewUrl: string } | null | undefined;
-  ratingKinopoisk: { kp: number; } | null | undefined;
+  kinopoisk_id: number 
+  name_ru: string 
+  name_en: string 
+  countries: Array<{ country: string }> 
+  genres: Array<{ genre: string }> 
+  year: number
+  name_original: string 
+  movie_length: number 
+  persons: Person[]
+  poster_url: string
+  rating_kinopoisk: number 
+  description: string 
+  imdb_d: string | null | undefined;
+  rating_age_limits: string 
+  rating_imdb: string 
+  type: string
+  videos:Video[]
+  filmId?: number; 
+  nameRu?: string 
+  nameEn?: string 
 }

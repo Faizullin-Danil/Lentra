@@ -1,7 +1,7 @@
 import "./ListFilms.css"
 import FilmCard from '../FilmCard/FilmCard';
 import React from "react";
-import { Film } from "@/interfaces/Ifilm";
+import { Film } from "@/interfaces/IFilm";
 
 interface ListFilmProps {
   films: Film[];
@@ -21,7 +21,7 @@ const ListFilms: React.FC<ListFilmProps> = ({ films }) => {
           enName={film.name_original}
           countries={film.countries?.length > 0 ? film.countries.map((country) => country.country).join(", ") : "Не указано"}
           year={film.year}
-          genres={film.genres?.length > 0 ? film.genres?.map((genre) => genre.genre).join(", ") : <p>не указано</p>}
+          genres={film.genres?.length > 0 ? film.genres?.map((genre) => genre.genre).join(", ") : "Не указано"}
           actors={
             film.persons
               ?.filter((person) => person.profession_text === "Актеры")

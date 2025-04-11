@@ -8,7 +8,7 @@ import { deleteFavouriteFilm as deleteFavouriteFilmFromAPI, addFavouriteFilm as 
 
 interface FilmProps {
   film: object,
-  id?: number,
+  id: number,
   name: string | null,
   countries: string[] | string,
   year: number,
@@ -18,7 +18,7 @@ interface FilmProps {
   producer: string,
   rating: number,
   movieLength: number
-  poster: string | null
+  poster: string
 }
 
 const FilmCard: React.FC<FilmProps> = ({film, id, name, countries, year, genres, enName, actors, producer, rating, movieLength, poster}) => {

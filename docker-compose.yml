@@ -1,0 +1,62 @@
+version: '3'
+
+services:
+  frontend:
+    container_name: lentra-frontend
+    build:
+      context: ./frontend
+    ports:
+      - "5173:5173"  # Порт, на котором будет работать фронтенд
+    environment:
+      - VITE_BACKEND_URL=http://backend:3000  # Указываем URL для бэкенда
+    depends_on:
+      - backend
+    networks:
+      - app-network
+    volumes:
+      - ./frontend:/app  # Монтируем директорию фронтенда в контейнер
+    # command: sh -c "npm install && npm run dev"  
+
+  backend:
+    container_name: lentra-backend
+    build:
+      context: ./backend
+    ports:
+      - "3000:3000"  # Порт, на котором будет работать бэкенд
+    environment:
+      - NODE_ENV=development  # Режим разработки
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/kinopoisk_db?schema=public
+    depends_on:
+      - db
+    networks:
+      - app-network
+    volumes:
+      - ./backend:/app  # Монтируем директорию бэкенда в контейнер
+    # command: >
+    #   # sh -c "npx prisma migrate deploy && nodemon src/server.js"  
+    #   sh -c "npx prisma migrate deploy && nodemon src/server.js"  
+
+    # Запуск с nodemon
+
+  db:
+    container_name: lentra-postgres
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: kinopoisk_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+volumes:
+  pgdata:
+    driver: local
+
+networks:
+  app-network:
+    driver: bridge

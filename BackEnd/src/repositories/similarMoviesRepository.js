@@ -43,6 +43,6 @@ exports.getSimilarMoviesFromDB = async (kinopoisk_id) => {
 
         return similarMovies
     } catch (error) {
-        console.error('Ошибка в репозитории images в getImagesFromDB:', error.message);
+        console.error('Ошибка в репозитории похожтх в getSimilarMoviesFromDB:', error.message);
     }
 }

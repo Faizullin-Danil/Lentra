@@ -1,37 +1,63 @@
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
-import "./FavouritesFilmsPage.css"
 import ListFilms from '../../components/ListFilms/ListFilms';
 import Filter from '../../components/Filter/Filter';
-import { useState } from 'react';
-import Alert from '@mui/material/Alert';
-import Stack from '@mui/material/Stack';
+import { useEffect, useState } from 'react';
+// import Alert from '@mui/material/Alert';
+// import Stack from '@mui/material/Stack';
 import { CircularProgress } from '@mui/material';
+import { fetchFavouritesFilms } from '../../services/apiService';
+import { setClearFilter } from '../../store/FilmsSlice';
 
 const FavouritesFilmsPage = () => {
-    const openAlert = useSelector((state: RootState) => state.alert.value);
+    // const openAlert = useSelector((state: RootState) => state.alert.value);
     const favouritesFilms = useSelector((state: RootState) => state.favouritesFilms.value);
-    const [isLoading, setIsLoading] = useState(false);
+    const [ isLoading, setIsLoading ] = useState(false);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        if (favouritesFilms.length === 0) {  
+            const loadFilms = async () => {
+            setIsLoading(true);
+            try {
+                await fetchFavouritesFilms(dispatch);
+            } catch (error) {
+                console.error("Ошибка загрузки избранных фильмов:", error);
+            } finally {
+                setIsLoading(false);
+            }
+            };
+        
+            loadFilms();
+        }
+
+        return () => {
+            dispatch(setClearFilter());
+            console.log("вышел")
+        };
+    }, [])
+
+    // console.log(favouritesFilms)
 
 
     return (
         <div className="w-full flex justify-center">
-            {isLoading ? ( // Если идёт загрузка — показываем индикатор
+            {isLoading ? (
                 <div className="flex justify-center items-center h-[90vh]">
-                    <CircularProgress size={60} />
+                    <CircularProgress sx={{ color: 'black'}}/>
                 </div>
-            ) : favouritesFilms.length > 0 ? ( // Если загрузка закончилась и есть фильмы
+            ) : favouritesFilms.length > 0 ? (
                 <div className="w-[80%] flex flex-col items-center ml-40">
                     <Filter whichPage="Страница избранных" />
                     <ListFilms films={favouritesFilms} />
                 </div>
-            ) : ( // Если фильмов нет
+            ) : ( 
                 <h1 className='flex justify-center items-center h-[90vh]'>
                     Пора бы добавить что-то в избранное...
                 </h1>
             )}
 
-            {openAlert && (
+            {/* {openAlert && (
                 <div className='fixed bottom-5'>
                     <Stack sx={{ width: '100%' }} spacing={2}>
                         <Alert variant="filled" severity="error">
@@ -39,7 +65,7 @@ const FavouritesFilmsPage = () => {
                         </Alert>
                     </Stack>
                 </div>
-            )}
+            )} */}
         </div>
     );
 };

@@ -1,10 +1,13 @@
+import { Box, Typography } from "@mui/material";
 import "./Footer.css"
 
 const Footer = () => {
   return (
-    <div className='Footer text-white'>
-      информация
-    </div>
+    <Box className="bg-black text-white text-center py-3">
+      <Typography >
+        MyApp
+      </Typography>
+    </Box>
   );
 };
 

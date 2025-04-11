@@ -1,8 +1,10 @@
 import axios from 'axios'
 import { setFilms } from "../store/FilmsSlice";
 import { setFavouritesFilms } from "../store/FavouriteFilmsSlice";
+import { AppDispatch } from '@/store/store';
 
-export const fetchFilms = async (dispatch) => {  
+
+export const fetchFilms = async (dispatch: AppDispatch) => {  
   try {
     const response = await axios.get('http://localhost:3000/api/movies');
     const films = response.data;
@@ -28,7 +30,7 @@ export const fetchFilms = async (dispatch) => {
   }
 };
 
-export const fetchFavouritesFilms = async (dispatch) => {
+export const fetchFavouritesFilms = async (dispatch: AppDispatch) => {
   try {
     const response = await axios.get('http://localhost:3000/api/favouritesmovies');
     const favouritesFilms = response.data;
@@ -82,9 +84,10 @@ export const addFavouriteFilm = async (kinopoisk_id: number) => {
   }
 }
 
-export const getImages = async (kinopoisk_id: string) => {
+export const getImages = async (kinopoisk_id: number) => {
   try {
     const response = await axios.get(`http://localhost:3000/api/images/${kinopoisk_id}`);
+    console.log(response.data)
     return response.data;
   } catch (error) {
     console.error("Ошибка при получении images:", error);
@@ -92,7 +95,7 @@ export const getImages = async (kinopoisk_id: string) => {
   }
 };
 
-export const getSimilarMovies = async (kinopoisk_id: string) => {
+export const getSimilarMovies = async (kinopoisk_id: number) => {
   try {
     const response = await axios.get(`http://localhost:3000/api/similarmovies/${kinopoisk_id}`);
     return response.data;
@@ -102,10 +105,10 @@ export const getSimilarMovies = async (kinopoisk_id: string) => {
   }
 };
 
-export const getSimilarMovieFromAPI = async (kinopoisk_id: string) => {
+export const getSimilarMovieFromAPI = async (kinopoisk_id: number) => {
   try {
     const response = await axios.get(`http://localhost:3000/api/similarmovies/fetch-similarmovie/${kinopoisk_id}`);
-    console.log("ответ",response.data)
+    console.log("ответ", response.data)
     return response.data;
   } catch (error) {
     console.error("Ошибка при получении images:", error);

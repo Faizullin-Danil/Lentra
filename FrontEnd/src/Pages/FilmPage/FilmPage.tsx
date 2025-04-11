@@ -1,70 +1,76 @@
-import { RootState } from "@/store/store";
-import { Box, Button } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
+import { Link } from 'react-router-dom'
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation, Link, useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { addFavouriteFilm, deleteFavouriteFilm } from '../../store/FavouriteFilmsSlice';
 import { FaRegStar, FaStar } from "react-icons/fa";
-import { deleteFavouriteFilm as deleteFavouriteFilmFromAPI, addFavouriteFilm as addFavouriteFilmFormAPI, getImages, getSimilarMovies, getSimilarMovieFromAPI } from "../../services/apiService";
+import { deleteFavouriteFilm as deleteFavouriteFilmFromAPI, addFavouriteFilm as addFavouriteFilmFormAPI, getImages, getSimilarMovies } from "../../services/apiService";
 import TabsPanel from "../../components/TabsPanel/TabsPanel";
 import TrailerComp from "../../components/TrailerComp/TrailerComp";
 import SimilarMovieCard from "../../components/SimilarMovieCard/SimilarMovieCard";
-
+import { Film } from "@/interfaces/IFilm";
+import { Image } from "@/interfaces/IImages";
+import { SimilarFilm } from "@/interfaces/ISimilarFilm";
+import { RootState } from "@/store/store";
 
 const FilmPage = () => {
-    const { kinopoisk_id } = useParams();  // Получаем ID фильма из URL
     const location = useLocation();
-    const [film, setFilm] = useState(location.state?.film || null);
+    const [film] = useState<Film>(location.state?.film || null);
     const favouritesFilms = useSelector((state: RootState) => state.favouritesFilms.value);
-    const [isFavourite, setIsFavourite] = useState(favouritesFilms.some(favFilm => favFilm.kinopoisk_id === film.kinopoisk_id));
-    const [images, setImages] = useState([]);
-    const [similarMovies, setSimilarMovies] = useState([]);
+    const [isFavourite, setIsFavourite] = useState(favouritesFilms.some(favFilm => favFilm.kinopoisk_id === film?.kinopoisk_id));
+    const [images, setImages] = useState<Image[]>();
+    const [similarMovies, setSimilarMovies] = useState<SimilarFilm[]>([]); 
     const dispatch = useDispatch();
 
-    console.log(kinopoisk_id)
-    
-    useEffect(() => {
-        console.log("hf,")
-        // Загружаем информацию о фильме по kinopoiskId, если film не передан через location.state
-        const loadFilmData = async () => {
-            if (!film && kinopoisk_id) {
-                // Сделать запрос к API для получения фильма по ID
-                // Здесь вы можете добавить свой запрос
-                const filmData = await getSimilarMovieFromAPI(kinopoisk_id);
-                setFilm(filmData);  // Устанавливаем состояние фильма
-            }
-        };
-        loadFilmData();
-    }, [kinopoisk_id]); 
+    console.log(film);
 
     useEffect(() => {
+        if (!film?.kinopoisk_id) {
+            console.error("ID фильма отсутствует.");
+            return;
+        }
+
+        const kinopoiskId = film.kinopoisk_id;
+
         const loadImages = async () => {
             try {
-                const imagesFromDB = await getImages(film.kinopoisk_id);
-                setImages(imagesFromDB);
+                if (typeof kinopoiskId === 'number') {
+                    const imagesFromDB = await getImages(kinopoiskId);
+                    setImages(imagesFromDB);
+                } else {
+                    console.error("ID фильма не является числом.");
+                }
             } catch (error) {
-                console.error("Ошибка загрузки изображения:", error);
+                console.error("Ошибка загрузки изображений:", error);
             }
         };
-        loadImages();
 
         const loadSimilarMovies = async () => {
             try {
-                const similarMoviesFromDB = await getSimilarMovies(film.kinopoisk_id);
-                setSimilarMovies(similarMoviesFromDB);
+                if (typeof kinopoiskId === 'number') {
+                    const similarMoviesFromDB = await getSimilarMovies(kinopoiskId);
+                    setSimilarMovies(similarMoviesFromDB); 
+                } else {
+                    console.error("ID фильма не является числом.");
+                }
             } catch (error) {
-                console.error("Ошибка загрузки изображения:", error);
+                console.error("Ошибка загрузки похожих фильмов:", error);
             }
         };
-        loadSimilarMovies()
 
-        setIsFavourite(favouritesFilms.some(favFilm => favFilm.kinopoisk_id === film.kinopoisk_id));
-    }, []);
-
-    // console.log("фильм:", film)
-
+        loadImages();
+        loadSimilarMovies();
+        
+        setIsFavourite(favouritesFilms.some(favFilm => favFilm.kinopoisk_id === kinopoiskId));
+    }, [film, favouritesFilms]);
 
     const handleToggleFavourite = () => {
+        if (!film?.kinopoisk_id) {
+            console.error("ID фильма отсутствует");
+            return;
+        }
+
         if (isFavourite) {
             dispatch(deleteFavouriteFilm(film.kinopoisk_id));
             deleteFavouriteFilmFromAPI(film.kinopoisk_id);
@@ -75,15 +81,15 @@ const FilmPage = () => {
         setIsFavourite(!isFavourite);
     };
 
-    const renderInfo = (label: string, value: string) => (
-        <div className="grid grid-cols-2 text-xs gap-2">
-            <h1 className="text-gray-400">{label}</h1>
-            <h1>{value || "Не указано"}</h1>
-        </div>
+    const renderInfo = (label: string, value: string | number) => (
+        <Box display="grid" gridTemplateColumns="1fr 1fr" gap={1} >
+            <Typography color="textSecondary" fontSize={15}>{label}</Typography>
+            <Typography fontSize={15} >{value || "Не указано"}</Typography>
+        </Box>
     );
 
     const renderPersons = (profession: string, label: string) => {
-        const persons = film.persons.filter(p => p.profession_text === profession).map(p => p.name_ru || p.name_en).join(", ");
+        const persons = film?.persons.filter(p => p.profession_text === profession).map(p => p.name_ru || p.name_en).join(", ");
         return renderInfo(label, persons);
     };
 
@@ -95,39 +101,42 @@ const FilmPage = () => {
         return 'актеров';
     };
 
-    const countActors = film.persons.filter(p => p.profession_text === "Актеры").length
-      
+    const countActors = film?.persons.filter(p => p.profession_text === "Актеры").length || 0;
 
     return (
-        <div className="mt-[50px] flex flex-col items-center">
-            <div className="w-[80%] flex gap-10">
-                <div className="w-[25%] flex flex-col gap-5">
-                    <img src={film.poster_url} className="w-80 h-120 object-cover" />
-                    {film.videos.length > 0 && (
-                        <div>
+        <Box sx={{ mt: 10, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <Box sx={{ display: 'flex', gap: 10, width: '80%' }}>
+                <Box sx={{ width: '25%', display: 'flex', flexDirection: 'column', gap: 5 }}>
+                    <img src={film?.poster_url} alt="poster" style={{ width: '100%', height: 'auto', objectFit: 'cover' }} />
+                    {film?.videos.length > 0 && (
+                        <Box>
                             <TrailerComp 
-                                previewUrl={images.length > 0 ? images[0].url : "https://example.com/default.jpg"} 
-                                videoUrl={film.videos[0].url} 
-                                site={film.videos[0].site}
+                                previewUrl={images && images.length > 0 ? images[0].url : "https://example.com/default.jpg"} 
+                                videoUrl={film?.videos[0].url} 
+                                site={film?.videos[0].site}
                                 width="300" height="200" 
                             />
-                            <h1>{film.videos[0].name}</h1>
-                        </div>
+                            <Typography variant="h6">{film?.videos[0].name}</Typography>
+                        </Box>
                     )}
-                </div>
+                </Box>
 
-                <div className="w-[50%] flex flex-col space-y-2 gap-3">
-                    <h1 className="flex items-center gap-4 text-2xl font-bold">
-                        {film.name_ru || film.name_original} ({film.year})
+                <Box sx={{ width: '50%', display: 'flex', flexDirection: 'column', gap: 3 }}>
+                    <Typography variant="h5" sx={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                        {film?.name_ru || film?.name_original} ({film?.year})
                         {isFavourite ? <FaStar className="text-4xl p-2" /> : <FaRegStar className="text-4xl p-2" />}
-                    </h1>
-                    <Button className="flex w-[250px] cursor-pointer !bg-gray-200 rounded-4xl !text-black text-3xl transition duration-300 hover:!bg-gray-300" onClick={handleToggleFavourite}>
+                    </Typography>
+                    <Button 
+                        variant="contained" 
+                        sx={{ width: 250, backgroundColor: 'gray', borderRadius: '50px', textTransform: 'none', fontSize: '1.2rem', '&:hover': { backgroundColor: 'gray' }}} 
+                        onClick={handleToggleFavourite}
+                    >
                         {isFavourite ? "убрать из избранного" : "Добавить в избранное"}
                     </Button>
-                    <h1 className="font-bold text-lg">О фильме</h1>
-                    {renderInfo("Год производства", film.year)}
-                    {renderInfo("Страна", film.countries.map(c => c.country).join(", "))}
-                    {renderInfo("Жанр", film.genres.map(g => g.genre).join(", "))}
+                    <Typography variant="h6" sx={{ mt: 2 }}>О фильме</Typography>
+                    {renderInfo("Год производства", film?.year)}
+                    {renderInfo("Страна", film?.countries?.map(c => c.country).join(", ") || "")}
+                    {renderInfo("Жанр", film?.genres?.map(g => g.genre).join(", ") || "")}
                     {renderPersons("Режиссеры", "Режиссер")}
                     {renderPersons("Художники", "Художник")}
                     {renderPersons("Операторы", "Оператор")}
@@ -137,39 +146,37 @@ const FilmPage = () => {
                     {renderPersons("Композиторы", "Композитор")}
                     {renderPersons("Сценаристы", "Сценарист")}
                     {renderPersons("Переводчики", "Переводчик")}
-                </div>
+                </Box>
 
-                <div className="w-[25%] text-center">
-                    <h1 className="text-xl font-semibold">{film.rating_kinopoisk}</h1>
-                    <h1 className="mt-10 font-bold">В главных ролях</h1>
-                    <div className="mt-2 text-start space-y-2">
-                        {film.persons.filter(actor => actor.profession_text === "Актеры").slice(0, 9).map(actor => (
-                            <Link to={`/actor/${actor.staff_id}`}>
-                                <h1 key={actor.staff_id} className="text-sm hover:text-blue-600">{actor.name_ru || actor.name_en}</h1>
+                <Box sx={{ width: '25%', textAlign: 'center' }}>
+                    <Typography variant="h5" sx={{ fontWeight: 'bold' }}>{film?.rating_kinopoisk}</Typography>
+                    <Typography variant="h6" sx={{ mt: 2 }}>В главных ролях</Typography>
+                    <Box sx={{ mt: 2, textAlign: 'left' }}>
+                        {film?.persons?.filter(actor => actor.profession_text === "Актеры").slice(0, 9).map(actor => (
+                            <Link key={actor.staff_id} to={`/actor/${actor.staff_id}`} className="flex hover:text-blue-500">
+                                {actor.name_ru || actor.name_en}
                             </Link>
                         ))}
-                    </div>
-                    <Link to={`/actorsbyfilm/${film.kinopoisk_id}`} state={{film}}>
-                        <button className="text-[12px] text-blue-600 hover:cursor-pointer hover:underline">
+                    </Box>
+                    <Link to={`/actorsbyfilm/${film?.kinopoisk_id}`} state={{film}}>
+                        <Button sx={{ mt: 2, fontSize: '0.875rem', color: 'blue' }}>
                             {countActors} {pluralizeActors(countActors)}
-                        </button>
+                        </Button>
                     </Link>
-                </div>
-            </div>
-
-            <div className="w-[80%] mt-10">
-                <TabsPanel images={images} description={film.description} videos={film.videos} />
-            </div>
-            <h1 className="text-xl text-left">Похожие фильмы</h1>
-            <div className="w-[80%] flex flex-row">
-                <Box className={`flex gap-2 overflow-x-auto whitespace-nowrap p-2 w-full ${similarMovies.length < 10 ? 'justify-center' : ''}`}>
-                    {similarMovies.map((movie, index) => (
-                        <SimilarMovieCard kinopoiskId={movie?.film_id} key={index} name={movie?.name_ru} posterUrl={movie?.poster_url}/>
-                    ))}
                 </Box>
-            </div>
+            </Box>
 
-        </div>
+            <Box sx={{ width: '80%', mt: 10 }}>
+                <TabsPanel images={images} description={film?.description} videos={film?.videos} />
+            </Box>
+
+            <Typography variant="h6" sx={{ mt: 4 }}>Похожие фильмы</Typography>
+            <Box sx={{ display: 'flex', gap: 2, overflowX: 'auto', padding: 2, width: '80%' }}>
+                {similarMovies.map((movie, index) => (
+                    <SimilarMovieCard key={index} name={movie?.name_ru} posterUrl={movie?.poster_url} />
+                ))}
+            </Box>
+        </Box>
     );
 };
 

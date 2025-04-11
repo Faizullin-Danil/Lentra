@@ -7,9 +7,11 @@ const Header = () => {
   const location = useLocation()
   
   return (
-    <AppBar position="fixed" className="!bg-black text-l">
+    <AppBar position="fixed" className="!bg-black text-1">
       <Toolbar className="flex items-center">
-        <img src={logo} className="w-30" alt="Logo" />
+        <Link to="/">
+          <img src={logo} className="w-30" alt="Logo" />  
+        </Link>
         
         <div className="flex gap-2 w-full justify-center gap-3">
           <Link to="/films" className={`text-gray-400 hover:text-white ${location.pathname === '/films' ? 'text-white' : ''}`}>Фильмы</Link>

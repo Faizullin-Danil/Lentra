@@ -1,4 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { store } from './store';
+
+export type AppDispatch = typeof store.dispatch;
 
 export const AlertSlice = createSlice({
     name: 'favouritesfilms',
@@ -17,11 +20,13 @@ export const AlertSlice = createSlice({
 
 export const { openAlert, closeAlert } = AlertSlice.actions;
 
-export const openAlertWithTimeout = () => (dispatch: any) => {
-    dispatch(openAlert());
-    setTimeout(() => {
+export const openAlertWithTimeout = () => {
+    return (dispatch: AppDispatch) => {
+      dispatch(openAlert());
+      setTimeout(() => {
         dispatch(closeAlert());
-    }, 2000);
-};
+      }, 2000);
+    };
+  };
 
 export default AlertSlice

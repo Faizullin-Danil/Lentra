@@ -1,11 +1,9 @@
 import { useState } from "react";
 import DropDownMenu from "../DropDownMenu/DropDownMenu";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
+import { TextField, Button, Box, Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { setClearFilter, setYears } from "../../store/FilmsSlice";
 import { setFavouriteClearFilter, setFavouriteYears } from "../../store/FavouriteFilmsSlice";
-import { openAlertWithTimeout } from "../../store/AlertSlice";
 import { RootState } from "@/store/store";
 
 interface FilterProps {
@@ -15,16 +13,13 @@ interface FilterProps {
 const Filter: React.FC<FilterProps> = ({ whichPage }) => {
   const [countryTitle, setCountryTitle] = useState<string>("Все страны");
   const [genreTitle, setGenreTitle] = useState<string>("Все жанры");
-  const [valueFrom, setValueFrom] = useState<string>(""); 
-  const [valueTo, setValueTo] = useState<string>(""); 
+  const [valueFrom, setValueFrom] = useState<string>("");
+  const [valueTo, setValueTo] = useState<string>("");
   const [errorFrom, setErrorFrom] = useState<boolean>(false);
   const [errorTo, setErrorTo] = useState<boolean>(false);
   const dispatch = useDispatch();
   const allFavouritesFilms = useSelector((state: RootState) => state.favouritesFilms.allFavouritesFilms);
   const allFilms = useSelector((state: RootState) => state.films.allFilms);
-  
-  console.log("ошибка:", errorFrom)
-
 
   const onChangeFrom = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value.replace(/\D/g, "");
@@ -42,21 +37,24 @@ const Filter: React.FC<FilterProps> = ({ whichPage }) => {
     setErrorTo(false);
   };
 
+
   const filterByYears = () => {
     let hasError = false;
 
     if (valueFrom === "") {
       setErrorFrom(true);
+      setTimeout(() => setErrorFrom(false), 500)
       hasError = true;
     }
     if (valueTo === "") {
       setErrorTo(true);
+      setTimeout(() => setErrorTo(false), 500)
       hasError = true;
     }
 
-    const isFilmsYears = allFilms.filter(film => (film.year >= valueFrom) && (film.year <= valueTo));
-    const isFavouritesFilmsYears = allFavouritesFilms.filter(film => (film.year >= valueFrom) && (film.year <= valueTo));
-    
+    const isFilmsYears = allFilms.filter(film => (film.year >= Number(valueFrom)) && (film.year <= Number(valueTo)));
+    const isFavouritesFilmsYears = allFavouritesFilms.filter(film => (film.year >= Number(valueFrom)) && (film.year <= Number(valueTo)));
+
     if (!hasError) {
       setCountryTitle("Все страны");
       setGenreTitle("Все жанры");
@@ -65,8 +63,6 @@ const Filter: React.FC<FilterProps> = ({ whichPage }) => {
         dispatch(setYears(YearsFromAndTo));
       } else if (whichPage === "Страница избранных" && isFavouritesFilmsYears.length !== 0) {
         dispatch(setFavouriteYears(YearsFromAndTo));
-      } else {
-        dispatch(openAlertWithTimeout());
       }
     }
   };
@@ -84,8 +80,8 @@ const Filter: React.FC<FilterProps> = ({ whichPage }) => {
   };
 
   return (
-    <div className="w-[14%] fixed left-40 mt-[27px]">
-      <div className="mb-2">
+    <Box sx={{ width: '14%', position: 'fixed', left: 180, mt: 4 }}>
+      <Box mb={2}>
         <DropDownMenu
           whichPage={whichPage}
           type="Страны"
@@ -96,9 +92,9 @@ const Filter: React.FC<FilterProps> = ({ whichPage }) => {
           setValueFrom={setValueFrom}
           setValueTo={setValueTo}
         />
-      </div>
+      </Box>
 
-      <div className="mb-2">
+      <Box mb={2}>
         <DropDownMenu
           whichPage={whichPage}
           title={genreTitle}
@@ -109,11 +105,11 @@ const Filter: React.FC<FilterProps> = ({ whichPage }) => {
           setValueFrom={setValueFrom}
           setValueTo={setValueTo}
         />
-      </div>
+      </Box>
 
-      <div className="border-2 border-gray-500 rounded-sm p-2">
-        <h1 className="pb-2">Годы</h1>
-        <div className="flex gap-1">
+      <Box border={2} borderColor="grey.600" borderRadius="4px" p={2}>
+        <Typography>Годы</Typography>
+        <Box display="flex" gap={1}>
           <TextField
             type="text"
             error={errorFrom}
@@ -122,17 +118,11 @@ const Filter: React.FC<FilterProps> = ({ whichPage }) => {
             placeholder="от"
             size="small"
             sx={{
-              "& input": { fontSize: "12px", padding: 1 },
-              "& .MuiOutlinedInput-root": {
-                "&:hover fieldset": {
-                  borderColor: "black",
-                },
-                "&.Mui-focused fieldset": {
-                  borderColor: "black",
-                },
-                "&.Mui-error fieldset": {
-                  borderColor: "red",
-                },
+              '& input': { fontSize: '12px', padding: 1 },
+              '& .MuiOutlinedInput-root': {
+                '&:hover fieldset': { borderColor: 'black', border: 2 },
+                '&.Mui-focused fieldset': { borderColor: 'black' },
+                '&.Mui-error fieldset': { borderColor: errorFrom ? 'red' : 'black', borderWidth: errorFrom ? 2 : 1},
               },
             }}
           />
@@ -145,29 +135,32 @@ const Filter: React.FC<FilterProps> = ({ whichPage }) => {
             size="small"
             variant="outlined"
             sx={{
-              "& input": { fontSize: "12px", padding: 1 },
-              "& .MuiOutlinedInput-root": {
-                "&:hover fieldset": {
-                  borderColor: "black",
-                },
-                "&.Mui-focused fieldset": {
-                  borderColor: "black",
-                },
-                "&.Mui-error fieldset": {
-                  borderColor: "red",
-                },
+              '& input': { fontSize: '12px', padding: 1 },
+              '& .MuiOutlinedInput-root': {
+                '&:hover fieldset': { borderColor: 'black' },
+                '&.Mui-focused fieldset': { borderColor: 'black' },
+                '&.Mui-error fieldset': { borderColor: errorTo ? 'red' : 'black', borderWidth: errorTo ? 2 : 1},
               },
             }}
           />
-        </div>
-        <Button className="w-full !text-black !pt-3 hover:!bg-gray-100" size="small" onClick={filterByYears}>
+        </Box>
+        <Button
+          fullWidth
+          sx={{ textTransform: 'none', mt: 1, color: 'black' }}
+          onClick={filterByYears}
+        >
           Фильтр по годам
         </Button>
-      </div>
-      <Button className="w-full !mt-2 !text-black hover:!bg-gray-100" onClick={clearFilter}>
-        Очистить фильтры
+      </Box>
+
+      <Button
+        fullWidth
+        sx={{ textTransform: 'none', mt: 2, color: 'black' }}
+        onClick={clearFilter}
+      >
+        Очистить
       </Button>
-    </div>
+    </Box>
   );
 };
 

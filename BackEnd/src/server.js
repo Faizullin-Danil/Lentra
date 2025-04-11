@@ -7,10 +7,11 @@ const imagesRouter = require('./routes/imagesRoutes')
 const similarMoviesRouter = require('./routes/similarMoviesRoutes')
 const actorsRouter = require('./routes/actorsRoutes')
 const cors = require('cors')
+require('dotenv').config();
 
 const app = express();
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.DB_PORT
 
 app.use(cors())
 app.use(express.json());
