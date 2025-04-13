@@ -26,14 +26,25 @@ exports.savePerson = async (personData) => {
 };
 
 exports.getPersonsByKinopoiskId = async (kinopoiskId) => {
-    try {
-      const persons = await prisma.persons.findMany({
-        where: { kinopoisk_id: kinopoiskId },
-      });
-      return persons;
-    } catch (error) {
-      console.error('Ошибка при получении персон по kinopoisk_id:', error.message);
-      throw new Error('Failed to retrieve persons from database');
-    }
-  };
+  try {
+    const persons = await prisma.persons.findMany({
+      where: { kinopoisk_id: kinopoiskId },
+    });
+    return persons;
+  } catch (error) {
+    console.error('Ошибка при получении персон по kinopoisk_id:', error.message);
+    throw new Error('Failed to retrieve persons from database');
+  }
+};
+
+exports.getKinopoiskIdfromDB = async () => {
+  try {
+      const kinopoiskIds = await prisma.movies.findMany({
+          select: { kinopoisk_id: true },
+        });
+      return kinopoiskIds
+  } catch (error) {
+      console.log("Ошибка при получении kinopoisk_id фильмов", error)
+  }
+}
   

@@ -2,7 +2,7 @@ const axios = require('axios');
 const movieRepository = require('../repositories/moviesRepository');
 require('dotenv').config();
 
-const API_URL_AllMovies = 'https://kinopoiskapiunofficial.tech/api/v2.2/films';
+const API_URL_AllMovies = 'https://kinopoiskapiunofficial.tech/api/v2.2/films?type=FILM&page=3';
 const API_KEY = process.env.API_KEY;
 
 exports.fetchAndSaveMovies = async () => {

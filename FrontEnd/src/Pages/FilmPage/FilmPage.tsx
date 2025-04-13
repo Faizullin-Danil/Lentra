@@ -1,6 +1,6 @@
 import { Box, Button, Typography } from "@mui/material";
 import { Link } from 'react-router-dom'
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { addFavouriteFilm, deleteFavouriteFilm } from '../../store/FavouriteFilmsSlice';
@@ -63,7 +63,13 @@ const FilmPage = () => {
         loadSimilarMovies();
         
         setIsFavourite(favouritesFilms.some(favFilm => favFilm.kinopoisk_id === kinopoiskId));
+
+
     }, [film, favouritesFilms]);
+
+    useLayoutEffect(() => {
+        window.scrollTo({ top: 0 });
+    }, [])
 
     const handleToggleFavourite = () => {
         if (!film?.kinopoisk_id) {
@@ -82,7 +88,7 @@ const FilmPage = () => {
     };
 
     const renderInfo = (label: string, value: string | number) => (
-        <Box display="grid" gridTemplateColumns="1fr 1fr" gap={1} >
+        value && <Box display="grid" gridTemplateColumns="1fr 1fr" gap={1} >
             <Typography color="textSecondary" fontSize={15}>{label}</Typography>
             <Typography fontSize={15} >{value || "Не указано"}</Typography>
         </Box>
@@ -111,7 +117,7 @@ const FilmPage = () => {
                     {film?.videos.length > 0 && (
                         <Box>
                             <TrailerComp 
-                                previewUrl={images && images.length > 0 ? images[0].url : "https://example.com/default.jpg"} 
+                                previewUrl={images && images.length > 0 ? images[0].url : null} 
                                 videoUrl={film?.videos[0].url} 
                                 site={film?.videos[0].site}
                                 width="300" height="200" 
@@ -170,12 +176,15 @@ const FilmPage = () => {
                 <TabsPanel images={images} description={film?.description} videos={film?.videos} />
             </Box>
 
-            <Typography variant="h6" sx={{ mt: 4 }}>Похожие фильмы</Typography>
-            <Box sx={{ display: 'flex', gap: 2, overflowX: 'auto', padding: 2, width: '80%' }}>
-                {similarMovies.map((movie, index) => (
-                    <SimilarMovieCard key={index} name={movie?.name_ru} posterUrl={movie?.poster_url} />
-                ))}
-            </Box>
+            {similarMovies.length > 0 && 
+            <>
+                <Typography variant="h6" sx={{ mt: 4 }}>Похожие фильмы</Typography>
+                <Box sx={{ display: 'flex', gap: 2, overflowX: 'auto', padding: 2, width: '80%' }}>
+                    {similarMovies.map((movie, index) => (
+                        <SimilarMovieCard key={index} name={movie?.name_ru} posterUrl={movie?.poster_url} />
+                    ))}
+                </Box>
+            </>}
         </Box>
     );
 };

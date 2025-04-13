@@ -5,7 +5,7 @@ import Filter from '../../components/Filter/Filter';
 import { useEffect, useState } from 'react';
 // import Alert from '@mui/material/Alert';
 // import Stack from '@mui/material/Stack';
-import { CircularProgress } from '@mui/material';
+import { Box, CircularProgress, Typography } from '@mui/material';
 import { fetchFavouritesFilms } from '../../services/apiService';
 import { setClearFilter } from '../../store/FilmsSlice';
 
@@ -43,18 +43,18 @@ const FavouritesFilmsPage = () => {
     return (
         <div className="w-full flex justify-center">
             {isLoading ? (
-                <div className="flex justify-center items-center h-[90vh]">
+                <Box className="flex justify-center items-center h-[90vh]">
                     <CircularProgress sx={{ color: 'black'}}/>
-                </div>
+                </Box>
             ) : favouritesFilms.length > 0 ? (
-                <div className="w-[80%] flex flex-col items-center ml-40">
+                <Box className="w-[80%] flex flex-col items-center ml-40">
                     <Filter whichPage="Страница избранных" />
                     <ListFilms films={favouritesFilms} />
-                </div>
+                </Box>
             ) : ( 
-                <h1 className='flex justify-center items-center h-[90vh]'>
+                <Typography className='flex justify-center items-center h-[90vh]'>
                     Пора бы добавить что-то в избранное...
-                </h1>
+                </Typography>
             )}
 
             {/* {openAlert && (

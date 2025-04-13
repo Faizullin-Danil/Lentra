@@ -7,13 +7,20 @@ const API_KEY = process.env.API_KEY;
 
 exports.fetchAndSavePersonsByMovies = async () => {
     try {
-        const movies = await pool.query('SELECT id, kinopoisk_id FROM movies');
+        const movies = await personRepository.getKinopoiskIdfromDB()
+        console.log("тут")
 
         if (!movies) {
             throw new Error("moviesId не вернулось");
         }
 
-        for (const movie of movies.rows) {
+        console.log("movies", movies)
+        const moviesSlise = movies.slice(20, 38);
+
+        console.log("moviesSlise", moviesSlise)
+
+
+        for (const movie of movies) {
             try {
                 const response = await axios.get('https://kinopoiskapiunofficial.tech/api/v1/staff', {
                     headers: { 'X-API-KEY': API_KEY },
