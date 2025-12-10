@@ -31,26 +31,45 @@ model favouritesmovies {
 }
 
 model movies {
-  id                 Int               @id @default(autoincrement())
-  imdb_id            String?           @unique
-  kinopoisk_id       Int?              @unique
-  name_en            String?
-  name_original      String?
-  name_ru            String?
+  id                 Int       @id @default(autoincrement())
+  imdb_id            String?   @unique
+  kinopoisk_id       Int?      @unique
+  name_en            String?   @db.Text
+  name_original      String?   @db.Text
+  name_ru            String?   @db.Text
   countries          Json?
   genres             Json?
   persons            Json?
-  poster_url         String?
-  poster_url_preview String?
-  rating_imdb        Decimal?          @db.Decimal(3, 1)
-  rating_kinopoisk   Decimal?          @db.Decimal(3, 1)
-  type               String?
+  poster_url         String?   @db.Text
+  poster_url_preview String?   @db.Text
+  rating_imdb        Decimal?  @db.Decimal(4, 2)
+  rating_kinopoisk   Decimal?  @db.Decimal(4, 2)
+  type               String?   @db.Text
   year               Int?
   movie_length       Int?
-  description        String?
-  rating_age_limits  String?
+  description        String?   @db.Text
+  rating_age_limits  String?   @db.Text
   videos             Json?
+
+  personsList persons[] // связь 1 ко многим
 }
+
+model persons {
+  id              Int     @id @default(autoincrement())
+  staff_id        Int     @unique
+  kinopoisk_id    Int?
+  name_en         String?
+  name_ru         String?
+  description     String?
+  poster_url      String?
+  profession_text String?
+  birthPlace      String?
+
+  movie_id        Int?       // внешний ключ на movies.id
+  movie           movies?    @relation(fields: [movie_id], references: [id])
+}
+
+
 
 model similarmovies {
   id                   Int     @id @default(autoincrement())
@@ -64,17 +83,7 @@ model similarmovies {
   kinopoisk_id         Int
 }
 
-model persons {
-  id              Int     @id @default(autoincrement())
-  staff_id        Int     @unique
-  kinopoisk_id    Int?
-  name_en         String?
-  name_ru         String?
-  description     String?
-  poster_url      String?
-  profession_text String?
-  birthPlace      String?
-}
+
 
 model images {
   id              Int     @id @default(autoincrement())

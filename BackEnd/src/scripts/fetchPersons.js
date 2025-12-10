@@ -1,50 +1,55 @@
 import "dotenv/config";
 import { PrismaClient } from "@prisma/client";
 
-const url = "https://api.kinopoisk.dev/v1.4/person";
+const url = "https://kinopoiskapiunofficial.tech/api/v1/staff";
 const KINOPOISK_API_KEY = process.env.KINOPOISK_API_KEY;
 
-const getPersonInfo = async (id) => {
-  const responsePerson = await fetch(`${url}/${id}`, {
+const getPersonInfo = async (id, movie_id) => {
+  const responsePersons = await fetch(`${url}?filmId=${id}`, {
     headers: {
       accept: "application/json",
       "X-API-KEY": KINOPOISK_API_KEY,
     },
   });
 
-  const person = await responsePerson.json();
+  const persons = await responsePersons.json();
 
-  return {
-    staff_id: person.id,
-    name_en: enName,
-    name_ru: name,
-    profession_text,
-    profession_key,
-  };
+  return persons.map((person) => ({
+    staff_id: person.staffId,
+    kinopoisk_id: id,
+    name_en: person.nameEn,
+    name_ru: person.nameRu,
+    description: person.description,
+    poster_url: person.posterUrl,
+    profession_text: person.professionText,
+    movie_id,
+  }));
 };
-
 const fetchPersons = async () => {
   const prisma = new PrismaClient();
 
   const filmsWithPersons = await prisma.movies.findMany({
-    select: { persons: true },
+    select: { kinopoisk_id: true, persons: true, id: true },
   });
 
-  const lastPersonId = await prisma.persons.findFirst({
-    orderBy: {
-      id: "desc",
-    },
-  });
+  const filterFilmsWithPersons = filmsWithPersons.filter(
+    (film) => !film.persons
+  );
 
-  for (const persons of filmsWithPersons) {
-    for (const person of persons.persons) {
-      const personInfo = getPersonInfo(person.id);
+  for (const { id, kinopoisk_id } of filterFilmsWithPersons) {
+    const personsByMovie = await getPersonInfo(kinopoisk_id, id);
 
-      await prisma.movies.createMany({
-        data: moviesData,
-        skipDuplicates: true,
-      });
-    }
+    await prisma.persons.createMany({
+      data: personsByMovie,
+      skipDuplicates: true,
+    });
+
+    await prisma.movies.update({
+      where: { id },
+      data: {
+        persons: true,
+      },
+    });
   }
 };
 

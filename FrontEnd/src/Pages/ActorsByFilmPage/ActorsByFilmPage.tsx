@@ -7,8 +7,8 @@ const ActorsByFilmPage = () => {
   const location = useLocation();
   const { film } = location.state || {};
 
-  const actors = film.persons.filter(
-    (person: Person) => person.enProfession === "actor"
+  const actors = film.personsList.filter(
+    (person: Person) => person.profession_text === "Актеры"
   );
 
   return (
@@ -22,8 +22,8 @@ const ActorsByFilmPage = () => {
           <Link to={`/actor/${actor.staff_id}`} state={actor}>
             <ActorCard
               key={actor.staff_id}
-              name_ru={actor.name}
-              poster_url={actor.photo}
+              name_ru={actor.name_ru}
+              poster_url={actor.poster_url}
             />
           </Link>
         ))}

@@ -52,7 +52,11 @@ exports.saveMovie = async (movieData) => {
 
 exports.getAllMovies = async () => {
   try {
-    return await prisma.movies.findMany();
+    return await prisma.movies.findMany({
+      include: {
+        personsList: true,
+      },
+    });
   } catch (error) {
     console.error(
       "Ошибка при получении фильмов из базы данных:",

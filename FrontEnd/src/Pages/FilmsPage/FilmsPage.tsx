@@ -9,7 +9,6 @@ import { Alert, Box, Stack } from "@mui/material";
 
 const FilmsPage = () => {
   const films = useSelector((state: RootState) => state.films.value);
-  console.log("films", films);
   const favouritesFilms = useSelector(
     (state: RootState) => state.favouritesFilms.value
   );

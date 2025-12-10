@@ -18,22 +18,22 @@ const ActorPage = () => {
     <Box className="flex flex-col items-center">
       <Box className="w-[80%] flex gap-10">
         <Box className="w-[25%] flex flex-col gap-5">
-          <img src={actor?.photo} className="w-80 h-120 object-cover" />
+          <img src={actor?.poster_url} className="w-80 h-120 object-cover" />
         </Box>
         <Box className="w-[50%] flex flex-col space-y-2 gap-3">
           <Typography className="flex items-center gap-4 text-2xl font-bold">
-            {actor?.nameRu || actor?.nameEn}
+            {actor?.name_ru || actor?.name_en}
           </Typography>
           <Typography fontSize={20} fontWeight={"bold"}>
             Об актёре
           </Typography>
-          <Typography>Профессия: {actor?.profession}</Typography>
-          <Typography>
+          <Typography>Профессия: {actor?.profession_text}</Typography>
+          {/* <Typography>
             Дата рождения: {actor?.birthday}
             {`, ${actor?.age} ${pluralizeYears(actor?.age)}`}
           </Typography>
           <Typography>Место рождения: {actor?.birthplace}</Typography>
-          <Typography>Награды: {actor?.hasAwards}</Typography>
+          <Typography>Награды: {actor?.hasAwards}</Typography> */}
         </Box>
       </Box>
     </Box>
