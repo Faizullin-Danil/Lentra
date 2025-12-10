@@ -3,20 +3,21 @@ import Filter from "../../components/Filter/Filter";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { useEffect } from "react";
-// import Alert from '@mui/material/Alert';
-// import Stack from '@mui/material/Stack';
 import { setClearFilter } from "../../store/FilmsSlice";
-import { fetchFavouritesFilms, fetchFilms } from "../../services/apiService"; 
-import { Box } from "@mui/material";
+import { fetchFavouritesFilms, fetchFilms } from "../../services/apiService";
+import { Alert, Box, Stack } from "@mui/material";
 
 const FilmsPage = () => {
   const films = useSelector((state: RootState) => state.films.value);
-  const favouritesFilms = useSelector((state: RootState) => state.favouritesFilms.value)
-  // const openAlert = useSelector((state: RootState) => state.alert.value);
+  console.log("films", films);
+  const favouritesFilms = useSelector(
+    (state: RootState) => state.favouritesFilms.value
+  );
+  const openAlert = useSelector((state: RootState) => state.alert.value);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (films.length === 0) {  
+    if (films.length === 0) {
       const loadFilms = async () => {
         try {
           await fetchFilms(dispatch);
@@ -25,38 +26,34 @@ const FilmsPage = () => {
         } finally {
         }
       };
-  
+
       loadFilms();
     }
 
-    if (favouritesFilms.length === 0) {  
+    if (favouritesFilms.length === 0) {
       const loadFilms = async () => {
-      try {
+        try {
           await fetchFavouritesFilms(dispatch);
-      } catch (error) {
+        } catch (error) {
           console.error("Ошибка загрузки избранных фильмов:", error);
-      }
+        }
       };
-  
+
       loadFilms();
     }
-  
+
     return () => {
       dispatch(setClearFilter());
-      console.log("вышел")
     };
-  }, []); 
-  
-
-  console.log("фильмы", films);
+  }, []);
 
   return (
     <Box className="flex justify-center">
-        <Box className="w-[80%] flex flex-col items-center ml-40">
-          <Filter whichPage="Главная страница" />
-          <ListFilms films={films} />
-        </Box>
-      {/* {openAlert && (
+      <Box className="w-[80%] flex flex-col items-center ml-40">
+        <Filter whichPage="Главная страница" />
+        <ListFilms films={films} />
+      </Box>
+      {openAlert && (
         <div className="fixed bottom-5">
           <Stack sx={{ width: "100%" }} spacing={2}>
             <Alert variant="filled" severity="error">
@@ -64,7 +61,7 @@ const FilmsPage = () => {
             </Alert>
           </Stack>
         </div>
-      )} */}
+      )}
     </Box>
   );
 };

@@ -13,9 +13,9 @@ export interface Actor {
     nameEn: string;
     nameRu: string;
     personId: number;
-    posterUrl: string;
+    photo: string;
     profession: string;
     sex: 'MALE' | 'FEMALE';
-    spouses: any[]; 
+    spouses: any[];
     webUrl: string;
   }

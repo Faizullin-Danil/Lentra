@@ -20,10 +20,8 @@ const FilmPage = () => {
     const favouritesFilms = useSelector((state: RootState) => state.favouritesFilms.value);
     const [isFavourite, setIsFavourite] = useState(favouritesFilms.some(favFilm => favFilm.kinopoisk_id === film?.kinopoisk_id));
     const [images, setImages] = useState<Image[]>();
-    const [similarMovies, setSimilarMovies] = useState<SimilarFilm[]>([]); 
+    const [similarMovies, setSimilarMovies] = useState<SimilarFilm[]>([]);
     const dispatch = useDispatch();
-
-    console.log(film);
 
     useEffect(() => {
         if (!film?.kinopoisk_id) {
@@ -50,7 +48,7 @@ const FilmPage = () => {
             try {
                 if (typeof kinopoiskId === 'number') {
                     const similarMoviesFromDB = await getSimilarMovies(kinopoiskId);
-                    setSimilarMovies(similarMoviesFromDB); 
+                    setSimilarMovies(similarMoviesFromDB);
                 } else {
                     console.error("ID фильма не является числом.");
                 }
@@ -61,7 +59,7 @@ const FilmPage = () => {
 
         loadImages();
         loadSimilarMovies();
-        
+
         setIsFavourite(favouritesFilms.some(favFilm => favFilm.kinopoisk_id === kinopoiskId));
 
 
@@ -95,7 +93,7 @@ const FilmPage = () => {
     );
 
     const renderPersons = (profession: string, label: string) => {
-        const persons = film?.persons.filter(p => p.profession_text === profession).map(p => p.name_ru || p.name_en).join(", ");
+        const persons = film?.persons.filter(p => p.enProfession === profession).map(p => p.name || p.enName).join(", ");
         return renderInfo(label, persons);
     };
 
@@ -107,20 +105,20 @@ const FilmPage = () => {
         return 'актеров';
     };
 
-    const countActors = film?.persons.filter(p => p.profession_text === "Актеры").length || 0;
+    const countActors = film?.persons.filter(p => p.enProfession === "actor").length || 0;
 
     return (
         <Box sx={{ mt: 10, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <Box sx={{ display: 'flex', gap: 10, width: '80%' }}>
                 <Box sx={{ width: '25%', display: 'flex', flexDirection: 'column', gap: 5 }}>
                     <img src={film?.poster_url} alt="poster" style={{ width: '100%', height: 'auto', objectFit: 'cover' }} />
-                    {film?.videos.length > 0 && (
+                    {film?.videos?.length > 0 && (
                         <Box>
-                            <TrailerComp 
-                                previewUrl={images && images.length > 0 ? images[0].url : null} 
-                                videoUrl={film?.videos[0].url} 
+                            <TrailerComp
+                                previewUrl={images && images.length > 0 ? images[0].url : null}
+                                videoUrl={film?.videos[0].url}
                                 site={film?.videos[0].site}
-                                width="300" height="200" 
+                                width="300" height="200"
                             />
                             <Typography variant="h6">{film?.videos[0].name}</Typography>
                         </Box>
@@ -132,17 +130,17 @@ const FilmPage = () => {
                         {film?.name_ru || film?.name_original} ({film?.year})
                         {isFavourite ? <FaStar className="text-4xl p-2" /> : <FaRegStar className="text-4xl p-2" />}
                     </Typography>
-                    <Button 
-                        variant="contained" 
-                        sx={{ width: 250, backgroundColor: 'gray', borderRadius: '50px', textTransform: 'none', fontSize: '1.2rem', '&:hover': { backgroundColor: 'gray' }}} 
+                    <Button
+                        variant="contained"
+                        sx={{ width: 250, backgroundColor: 'gray', borderRadius: '50px', textTransform: 'none', fontSize: '1.2rem', '&:hover': { backgroundColor: 'gray' }}}
                         onClick={handleToggleFavourite}
                     >
                         {isFavourite ? "убрать из избранного" : "Добавить в избранное"}
                     </Button>
                     <Typography variant="h6" sx={{ mt: 2 }}>О фильме</Typography>
                     {renderInfo("Год производства", film?.year)}
-                    {renderInfo("Страна", film?.countries?.map(c => c.country).join(", ") || "")}
-                    {renderInfo("Жанр", film?.genres?.map(g => g.genre).join(", ") || "")}
+                    {renderInfo("Страна", film?.countries?.map(c => c.name).join(", ") || "")}
+                    {renderInfo("Жанр", film?.genres?.map(g => g.name).join(", ") || "")}
                     {renderPersons("Режиссеры", "Режиссер")}
                     {renderPersons("Художники", "Художник")}
                     {renderPersons("Операторы", "Оператор")}
@@ -158,9 +156,9 @@ const FilmPage = () => {
                     <Typography variant="h5" sx={{ fontWeight: 'bold' }}>{film?.rating_kinopoisk}</Typography>
                     <Typography variant="h6" sx={{ mt: 2 }}>В главных ролях</Typography>
                     <Box sx={{ mt: 2, textAlign: 'left' }}>
-                        {film?.persons?.filter(actor => actor.profession_text === "Актеры").slice(0, 9).map(actor => (
+                        {film?.persons?.filter(actor => actor.enProfession === "actor").slice(0, 9).map(actor => (
                             <Link key={actor.staff_id} to={`/actor/${actor.staff_id}`} className="flex hover:text-blue-500">
-                                {actor.name_ru || actor.name_en}
+                                {actor.name || actor.enName}
                             </Link>
                         ))}
                     </Box>
@@ -176,7 +174,7 @@ const FilmPage = () => {
                 <TabsPanel images={images} description={film?.description} videos={film?.videos} />
             </Box>
 
-            {similarMovies.length > 0 && 
+            {similarMovies.length > 0 &&
             <>
                 <Typography variant="h6" sx={{ mt: 4 }}>Похожие фильмы</Typography>
                 <Box sx={{ display: 'flex', gap: 2, overflowX: 'auto', padding: 2, width: '80%' }}>

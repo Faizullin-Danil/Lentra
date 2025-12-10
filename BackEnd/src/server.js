@@ -11,18 +11,18 @@ require('dotenv').config();
 
 const app = express();
 
-const PORT = process.env.DB_PORT
+const PORT = process.env.PORT
 
 app.use(cors())
 app.use(express.json());
 
-app.use('/api/movies', moviesRouter);  
-app.use('/api/persons', personsRouter); 
-app.use('/api/favouritesmovies', favouritesMoviesRouter); 
-app.use('/api/videos', videosRouter); 
-app.use('/api/images', imagesRouter); 
-app.use('/api/similarmovies', similarMoviesRouter); 
-app.use('/api/actor', actorsRouter);  
+app.use('/api/movies', moviesRouter);
+app.use('/api/persons', personsRouter);
+app.use('/api/favouritesmovies', favouritesMoviesRouter);
+app.use('/api/videos', videosRouter);
+app.use('/api/images', imagesRouter);
+app.use('/api/similarmovies', similarMoviesRouter);
+app.use('/api/actor', actorsRouter);
 
 
 app.listen(PORT, () => console.log(`Сервер запущен на порте ${PORT}`));

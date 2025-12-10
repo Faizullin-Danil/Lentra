@@ -16,7 +16,7 @@ const FavouritesFilmsPage = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        if (favouritesFilms.length === 0) {  
+        if (favouritesFilms.length === 0) {
             const loadFilms = async () => {
             setIsLoading(true);
             try {
@@ -27,18 +27,14 @@ const FavouritesFilmsPage = () => {
                 setIsLoading(false);
             }
             };
-        
+
             loadFilms();
         }
 
         return () => {
             dispatch(setClearFilter());
-            console.log("вышел")
         };
     }, [])
-
-    // console.log(favouritesFilms)
-
 
     return (
         <div className="w-full flex justify-center">
@@ -51,7 +47,7 @@ const FavouritesFilmsPage = () => {
                     <Filter whichPage="Страница избранных" />
                     <ListFilms films={favouritesFilms} />
                 </Box>
-            ) : ( 
+            ) : (
                 <Typography className='flex justify-center items-center h-[90vh]'>
                     Пора бы добавить что-то в избранное...
                 </Typography>

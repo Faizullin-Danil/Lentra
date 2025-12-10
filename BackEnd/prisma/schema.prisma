@@ -3,7 +3,6 @@ generator client {
   binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
-
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -28,12 +27,12 @@ model favouritesmovies {
   movie_length       Int?
   description        String?
   rating_age_limits  String?
-  videos             Json?      
+  videos             Json?
 }
 
 model movies {
   id                 Int               @id @default(autoincrement())
-  imdb_id            String?           @unique @db.VarChar(20)
+  imdb_id            String?           @unique
   kinopoisk_id       Int?              @unique
   name_en            String?
   name_original      String?
@@ -45,7 +44,7 @@ model movies {
   poster_url_preview String?
   rating_imdb        Decimal?          @db.Decimal(3, 1)
   rating_kinopoisk   Decimal?          @db.Decimal(3, 1)
-  type               String?           @db.VarChar(10)
+  type               String?
   year               Int?
   movie_length       Int?
   description        String?
@@ -55,7 +54,7 @@ model movies {
 
 model similarmovies {
   id                   Int     @id @default(autoincrement())
-  film_id               Int         
+  film_id               Int
   name_ru               String?
   name_en               String?
   name_original         String?
@@ -74,13 +73,13 @@ model persons {
   description     String?
   poster_url      String?
   profession_text String?
-  profession_key  String? @db.VarChar(50)
+  birthPlace      String?
 }
 
 model images {
   id              Int     @id @default(autoincrement())
   kinopoisk_id    Int?
-  url             String? 
+  url             String?
 }
 
 model actors {
@@ -96,5 +95,5 @@ model actors {
   birthplace     String?
   hasAwards      Int?
   profession     String?
-  facts          Json?       
+  facts          Json?
 }

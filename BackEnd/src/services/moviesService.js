@@ -7,7 +7,6 @@ const API_KEY = process.env.API_KEY;
 
 exports.fetchAndSaveMovies = async () => {
     try {
-        console.log('Запрос к API Кинопоиска...');
         const response = await axios.get(API_URL_AllMovies, {
             headers: {
                 'X-API-KEY': API_KEY,

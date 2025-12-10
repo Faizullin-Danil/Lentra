@@ -64,12 +64,12 @@ const TabsPanel: React.FC<TabsPanelProps> = ({ description, videos, images }) =>
       </CustomTabPanel>
 
       <CustomTabPanel value={value} index={1}>
-        <Box 
-          display="flex" 
-          gap={2} 
-          sx={{ overflowX: 'auto' }} // добавляем горизонтальную прокрутку
+        <Box
+          display="flex"
+          gap={2}
+          sx={{ overflowX: 'auto' }}
         >
-          {videos.length > 0
+          {videos?.length > 0
             ? videos.map((video, index) => (
                 <Box key={index} textAlign="center">
                   <TrailerComp videoUrl={video.url} width="150" height="100" />
@@ -83,22 +83,22 @@ const TabsPanel: React.FC<TabsPanelProps> = ({ description, videos, images }) =>
 
       <CustomTabPanel value={value} index={2}>
   {images && images.length > 0 ? (
-    <Box 
-      display="flex" 
-      flexWrap="wrap" 
-      justifyContent="center" 
+    <Box
+      display="flex"
+      flexWrap="wrap"
+      justifyContent="center"
       gap={1}
       sx={{ overflowX: 'auto', paddingBottom: '10px' }} // добавляем прокрутку если нужно
     >
       {images.map((image, index) => (
         <Box key={index} sx={{ width: { xs: '100%', sm: '45%', md: '30%' } }}>
-          <img 
-            src={image.url} 
-            style={{ 
+          <img
+            src={image.url}
+            style={{
               width: '100%', // адаптивная ширина
-              height: 'auto', 
+              height: 'auto',
               objectFit: 'cover', // для сохранения пропорций изображения и корректной обрезки
-            }} 
+            }}
             alt="Film Image"
           />
         </Box>

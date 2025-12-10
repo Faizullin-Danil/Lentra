@@ -25,7 +25,7 @@ const ListFilms: React.FC<ListFilmProps> = ({ films }) => {
     setTimeout(() => {
       setCurrentPage(page);
       setLoading(false);
-    }, 500); // Ждем, чтобы не было резкого мигания
+    }, 500);
   };
 
   return (
@@ -38,23 +38,23 @@ const ListFilms: React.FC<ListFilmProps> = ({ films }) => {
             id={film.kinopoisk_id}
             name={film.name_ru}
             enName={film.name_original}
-            countries={film.countries?.length > 0 ? film.countries.map((country) => country.country).join(", ") : "Не указано"}
+            countries={film.countries?.length > 0 ? film.countries.map((country) => country.name).join(", ") : "Не указано"}
             year={film.year}
-            genres={film.genres?.length > 0 ? film.genres?.map((genre) => genre.genre).join(", ") : "Не указано"}
+            genres={film.genres?.length > 0 ? film.genres?.map((genre) => genre.name).join(", ") : "Не указано"}
             actors={
               film.persons
-                ?.filter((person) => person.profession_text === "Актеры")
+                ?.filter((person) => person.enProfession === "actor")
                 .slice(0, 2)
-                .map((person) => person.name_ru)
+                .map((person) => person.name)
                 .join(", ")
             }
-            rating={film.rating_kinopoisk}
+            rating={Number(film.rating_kinopoisk) !== 0 ? film.rating_kinopoisk : film.rating_imdb}
             movieLength={film.movie_length}
             producer={
               film.persons
-                ?.filter((person) => person.profession_text === "Продюсеры")
+                ?.filter((person) => person.enProfession === "producer")
                 .slice(0, 2)
-                .map((person) => person.name_ru !== '' ? person.name_ru : person.name_en)
+                .map((person) => person.name !== '' ? person.name : person.enName)
                 .join(", ")
             }
             poster={film.poster_url}

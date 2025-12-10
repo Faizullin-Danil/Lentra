@@ -1,7 +1,7 @@
 import { FaRegStar } from "react-icons/fa";
 import { FaStar } from "react-icons/fa";
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from "../../store/store"; 
+import { RootState } from "../../store/store";
 import { addFavouriteFilm, deleteFavouriteFilm } from '../../store/FavouriteFilmsSlice';
 import { Link } from 'react-router-dom';
 import { deleteFavouriteFilm as deleteFavouriteFilmFromAPI, addFavouriteFilm as addFavouriteFilmFormAPI } from "../../services/apiService";
@@ -30,8 +30,8 @@ const FilmCard: React.FC<FilmProps> = ({film, id, name, countries, year, genres,
 
   const isFavourite = favouritesFilms.some(favFilm => favFilm.kinopoisk_id === id);
 
-  const formattedMovieLength = movieLength < 60 
-    ? `${movieLength} мин` 
+  const formattedMovieLength = movieLength < 60
+    ? `${movieLength} мин`
     : `${Math.floor(movieLength / 60)} ч ${movieLength % 60} мин`;
 
   const handleToggleFavourite = () => {
@@ -49,11 +49,11 @@ const FilmCard: React.FC<FilmProps> = ({film, id, name, countries, year, genres,
       {!imageLoaded && (<Skeleton variant="rectangular" width='100%' height={128} animation="wave" className="rounded-xl mb-1"/>)}
 
       <Box style={{ display: imageLoaded ? 'flex' : 'none' }} className='m-2 p-5 flex flex-row gap-10 duration-300 hover:bg-gray-100 hover:rounded-4xl'>
-        <Link to={`/film/${id}`} state={{film}} className='flex gap-5 w-[100%]'>          
-          <img 
-            src={poster} 
-            alt={name || enName} 
-            className='w-25 h-40' 
+        <Link to={`/film/${id}`} state={{film}} className='flex gap-5 w-[100%]'>
+          <img
+            src={poster}
+            alt={name || enName}
+            className='w-25 h-40'
             onLoad={() => setImageLoaded(true)} />
           <Box className="w-[60%]">
             <Typography className='text-xl font-bold'>{name || enName}</Typography>

@@ -4,23 +4,13 @@ import { setFavouritesFilms } from "../store/FavouriteFilmsSlice";
 import { AppDispatch } from '@/store/store';
 
 
-export const fetchFilms = async (dispatch: AppDispatch) => {  
+export const fetchFilms = async (dispatch: AppDispatch) => {
   try {
     const response = await axios.get('http://localhost:3000/api/movies');
     const films = response.data;
 
     if (films && Array.isArray(films)) {
-      const filmsWithPersons = await Promise.all(films.map(async (film) => {
-        try {
-          const personsData = await fetchPersons(film.kinopoisk_id);
-          return { ...film, persons: personsData || [] };
-        } catch (error) {
-          console.error(`Ошибка при получении персон для фильма с ID ${film.kinopoisk_id}:`, error);
-          return { ...film, persons: [] };
-        }
-      }));
-
-      dispatch(setFilms(filmsWithPersons));  
+      dispatch(setFilms(films));
     } else {
       throw new Error("Данные фильмов не содержат массив 'items'");
     }
@@ -87,7 +77,6 @@ export const addFavouriteFilm = async (kinopoisk_id: number) => {
 export const getImages = async (kinopoisk_id: number) => {
   try {
     const response = await axios.get(`http://localhost:3000/api/images/${kinopoisk_id}`);
-    console.log(response.data)
     return response.data;
   } catch (error) {
     console.error("Ошибка при получении images:", error);
@@ -108,7 +97,6 @@ export const getSimilarMovies = async (kinopoisk_id: number) => {
 export const getSimilarMovieFromAPI = async (kinopoisk_id: number) => {
   try {
     const response = await axios.get(`http://localhost:3000/api/similarmovies/fetch-similarmovie/${kinopoisk_id}`);
-    console.log("ответ", response.data)
     return response.data;
   } catch (error) {
     console.error("Ошибка при получении images:", error);
@@ -124,4 +112,4 @@ export const getActor = async(actor_id: string) => {
     console.error("Ошибка при получении данных актера:", error);
     throw error;
   }
-} 
+}
